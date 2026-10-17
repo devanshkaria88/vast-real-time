@@ -52,6 +52,19 @@ locally and play.
   ffprobe the outputs (duration, size, codec); view extracted frames.
 - Spend cap: about 5 generations (~$37.50) unless the user asks for more.
 
+## Results so far
+
+- Shipped: `poodle/media/luma/PD-0147.mp4` (red car runs the red light into
+  the blue car; trim 0.5 s) and `PD-0226.mp4` (night, red car rolls over the
+  give-way lines; trim 0.2 s). Manifest records prompt, ARN, S3 output, trim.
+- What Ray2 does (7 takes, ~$52.80 incl. erase): end frame only sweeps the
+  camera in; start frame only dives in like a drone; erased start + evidence
+  still end is the only setup that keeps the CCTV fixed, but Ray2 rushes the
+  cars in (pop-in) and holds. About 1 in 3 takes usable; timing words and
+  "drives in from the edge of the frame" made takes chaotic.
+- Rejected takes kept locally in `server/data/luma/` (gitignored).
+- Stability Image Services agreement accepted ($0.07/image) for Erase Object.
+
 ## Handoff checkpoint
 
 - Last completed: Task registered; implementation has not started.

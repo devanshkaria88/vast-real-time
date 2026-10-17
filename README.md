@@ -41,9 +41,9 @@ uv venv .venv --python 3.12 && uv pip install --python .venv/bin/python -r serve
 
 Incident footage is demo footage: the team's synthetic CCTV stills (`Demo img/`) turned into 12 s clips by `server/tools/build_media.py`, with the burned-in clock set to each claim's incident time. Policies are synthetic.
 
-Generated accident clips: `server/tools/luma_videos.py` sends a claim's still to Luma Ray2 on Amazon Bedrock as the last keyframe of a 5 s clip, so the model animates the lead-up and the impact and ends on the evidence frame. Clips land in `poodle/media/luma/` with a manifest of prompts and job ARNs. Ray2 runs only in us-west-2 (async, one job at a time, $7.50 per 5 s 720p clip) and needs `aws sso login`. The desk still plays the 12 s clips.
+Generated accident clips: `server/tools/luma_videos.py` makes 5 s CCTV clips of the crash itself with Luma Ray2 on Amazon Bedrock. Both ends are pinned to the camera's framing so it cannot move: the first keyframe is the still with the crashed cars erased (Stability Erase Object, masked from the YOLO boxes), the last is the evidence still, and the prompt says who broke which rule. Clips land in `poodle/media/luma/` with a manifest of prompts and job ARNs. Ray2 runs only in us-west-2 (async, one job at a time, $7.50 per 5 s 720p clip) and needs `aws sso login`. The desk still plays the 12 s clips.
 
-Code is about 200 KB. Media is about 2 MB; to keep it out of a 1 MiB deploy, upload `poodle/media/` to a bucket and set `POODLE_MEDIA_BASE` to its URL.
+Code is about 200 KB. Media is about 3 MB; to keep it out of a 1 MiB deploy, upload `poodle/media/` to a bucket and set `POODLE_MEDIA_BASE` to its URL.
 
 ### Demo in 90 seconds
 

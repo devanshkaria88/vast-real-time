@@ -1,23 +1,33 @@
-"""Generate accident clips from the incident stills with Luma Ray2 on Amazon Bedrock.
+"""Generate CCTV accident clips from the incident stills with Luma Ray2 on Amazon Bedrock.
 
-Each claim's still, stamped with its OSD clock as in build_media.py, is the end
-keyframe of a 5 s clip: Ray2 animates the lead-up and the impact and lands on
-the evidence frame. Ray2 is only offered in us-west-2, only through the async
-API (one job at a time per account), and writes its video to S3. The result is
-stretched back to the still's 1168x784 frame and the OSD box is redrawn with a
-clock that ticks up to the claim's incident time.
+A CCTV camera never moves, so both ends of each 5 s clip are pinned to the
+still's framing. The start keyframe is the claim's still with the crashed cars
+and their debris erased (Stability Erase Object, masked from the YOLO boxes of
+the claim's vehicles); the end keyframe is the still itself, stamped with its
+OSD clock as in build_media.py. Ray2 only has to drive the cars in and crash
+them. The clip is stretched back to the still's 1168x784 frame, dropped to
+15 fps with sensor grain, and the OSD box is redrawn with a clock that ticks up
+to the claim's incident time.
 
-Output: poodle/media/luma/<claim>.mp4 and manifest.json. Raw Ray2 clips stay in
-server/data/luma/ (gitignored) so --process-only can rebuild without paying
-again. A 5 s 720p clip costs $7.50. Auth is the AWS default chain
-(`aws sso login`); LUMA_S3_URI overrides the output location. Needs ffmpeg:
+Ray2 is only offered in us-west-2, only through the async API (one job at a
+time per account), and writes its video to S3. A 5 s 720p clip costs $7.50, an
+erased start frame $0.07. Auth is the AWS default chain (`aws sso login`);
+LUMA_S3_URI overrides the output location. Needs ffmpeg.
 
-    uv run --with boto3 --with pillow python server/tools/luma_videos.py PD-0147 PD-0236
-    uv run --with boto3 --with pillow python server/tools/luma_videos.py --process-only
+Output: poodle/media/luma/<claim>.mp4 and manifest.json. Start frames and raw
+Ray2 clips stay in server/data/luma/ (gitignored); delete a start frame to
+erase it again. --plates-only builds the start frames to check before paying for
+video; --process-only rebuilds the clips from the raw downloads; --trim cuts
+seconds off the start where Ray2 pops a car into view (kept in the manifest).
+
+    uv run --with boto3 --with pillow python server/tools/luma_videos.py --plates-only PD-0147
+    uv run --with boto3 --with pillow python server/tools/luma_videos.py PD-0147 PD-0219
+    uv run --with boto3 --with pillow python server/tools/luma_videos.py --process-only PD-0147 --trim 0.5
 """
 
 from __future__ import annotations
 
+import argparse
 import base64
 import io
 import json
@@ -31,89 +41,128 @@ from pathlib import Path
 
 import boto3
 from botocore.exceptions import ClientError
-from PIL import Image
+from PIL import Image, ImageDraw
 
 from build_media import CLIPS, SRC, frame
 
 ROOT = Path(__file__).resolve().parents[2]
+DATA = ROOT / "server" / "data"
 OUT = ROOT / "poodle" / "media" / "luma"
-RAW = ROOT / "server" / "data" / "luma"
+RAW = DATA / "luma"
 REGION = "us-west-2"
 MODEL = "luma.ray-v2:0"
+ERASE = "us.stability.stable-image-erase-object-v1:0"
 SIZE = (1168, 784)
-# Ray2 has no 3:2 option, so the still is squashed to 4:3 for the request and the clip is stretched back.
+# Ray2 has no 3:2 option, so the keyframes are squashed to 4:3 for the request and the clip is stretched back.
 REQUEST_SIZE = (1024, 768)
 SETTINGS = {"aspect_ratio": "4:3", "resolution": "720p", "duration": "5s", "loop": False}
-CAMERA = "Fixed elevated CCTV camera, static wide shot, no camera movement, realistic security camera footage."
+CAMERA = (
+    "Real CCTV traffic camera recording: grainy surveillance video from a fixed camera on a pole, locked-off "
+    "static shot, the camera never moves, pans or zooms. Ordinary real-time traffic speed, no slow motion, no cuts."
+)
 
+# Ray2 does best with a plain sequence of events. Timing words ("for the first two seconds") and "drives in from
+# the edge of the frame" made it spawn cars, debris and spray early in most takes.
 PROMPTS = {
     "PD-0147": (
-        "Suburban London crossroads with traffic lights, overcast daylight. A blue hatchback pulls out of the "
-        "side road on the left into the junction. A red hatchback speeds down the main road from the distance, "
-        "runs the red light and smashes into the front of the blue car in the middle of the junction. Bonnets "
-        "crumple, glass and plastic debris scatter across the tarmac and both cars jolt to a stop nose to nose. "
-        "A dark grey car behind brakes and stops."
+        "Overcast suburban London crossroads. The main-road traffic lights stay red the whole time and a dark grey "
+        "car waits at them. A blue hatchback drives out of the side road on the left and crosses the junction on "
+        "its green light. A red hatchback comes down the main road from the distance, goes past the waiting grey "
+        "car, runs the red light and crashes into the front of the blue car in the middle of the junction. Glass "
+        "and plastic scatter and both cars stop nose to nose."
     ),
     "PD-0188": (
-        "Busy London dual carriageway, daylight, traffic flowing in both directions. A white hatchback cuts "
-        "across from the outside lane right in front of a black SUV and brakes hard. The SUV cannot stop and "
-        "hits the white car's rear corner, spinning it round across the lane line. Debris scatters across the "
-        "lane while other cars brake and steer around."
+        "Daylight on a busy London dual carriageway, steady traffic. A black SUV drives in the inside lane. A white "
+        "hatchback in the outside lane suddenly swerves across in front of it without signalling and brakes hard "
+        "for no reason. The SUV cannot stop and hits the white car's rear corner, spinning it round across the "
+        "lane line. Other cars brake and steer around."
     ),
     "PD-0204": (
-        "Suburban roundabout seen from above, daylight. A white hatchback circulates around the roundabout "
-        "from the right. A red hatchback approaches from the lower left entry, crosses the give-way line "
-        "without stopping and pulls into the white car's path. The white car hits the front of the red car, "
-        "plastic debris scatters across the carriageway and both cars stop."
+        "Daylight at a suburban roundabout. A white hatchback drives round the roundabout from the right. A red "
+        "hatchback comes up to the entry at the lower left and, without giving way to traffic from the right, "
+        "drives straight over the give-way line onto the roundabout and into the white car's path. The white car "
+        "hits the red car's front corner, debris scatters and both cars stop."
     ),
     "PD-0211": (
-        "Busy multi-lane London junction, morning daylight, traffic streaming down the lanes towards the "
-        "camera. A blue hatchback drifts right across the lane markings while a silver hatchback swings left "
-        "out of its lane beside the traffic island. Their front corners collide, debris sprays across the road "
-        "and both cars stop. A white van slows in the next lane; a red double-decker bus waits at the stop."
+        "Morning peak at a busy multi-lane London junction, traffic flowing down the lanes towards the camera. A "
+        "blue hatchback drifts right across the lane markings without signalling as a silver hatchback swings left "
+        "out of its lane beside the traffic island. Their front corners collide, debris sprays and both cars stop. "
+        "A white van slows in the next lane; a red double-decker bus waits at the stop."
     ),
     "PD-0219": (
-        "London junction in heavy rain before sunrise, dim blue light, wet reflective road. A blue hatchback "
-        "drives along the main road with its headlights on. A red hatchback pulls out of the side road on the "
-        "right past the GIVE WAY sign without stopping, straight into its path. They collide front to front, "
-        "spray and debris scatter across the wet tarmac and both cars stop."
+        "Heavy rain before sunrise at a London junction, dim light, wet reflective road. A blue hatchback with its "
+        "headlights on drives along the main road. A red hatchback comes out of the side road on the right, "
+        "ignores the GIVE WAY sign and pulls straight out without stopping, into the blue car's path. They collide "
+        "front to front, spray and debris scatter on the wet road and both cars stop."
     ),
     "PD-0226": (
-        "Quiet London junction at night under street lights. A blue hatchback with its headlights on drives "
-        "along the main road from the left. A red hatchback with its headlights on rolls out of the side road "
-        "ahead, over the give-way line, into its path. A low-speed bump: the fronts touch, a few fragments drop "
-        "onto the road and both cars stop."
+        "Night at a quiet London junction under street lights, dry road. A blue hatchback with its headlights on "
+        "drives along the main road from the left. A red hatchback with its headlights on comes out of the side "
+        "road at the top and rolls straight over the give-way lines without stopping, into the blue car's path. A "
+        "low-speed bump: the fronts touch, a few fragments fall and both cars stop."
     ),
     "PD-0231": (
-        "Suburban London main road at a side turning, overcast daylight. A silver estate car slows and turns "
-        "right across the road. A blue hatchback overtaking along the centre line at speed slams head-on into "
-        "the front of the turning silver car. Both bonnets crumple, steam and debris burst out, and the two "
-        "cars come to rest locked together."
+        "Overcast suburban London main road at a side turning. A silver estate car slows and turns right across "
+        "the road. A blue hatchback overtakes along the centre line at speed and hits the turning silver car "
+        "head-on. Both fronts crumple, steam and debris burst out and the two cars stop locked together."
     ),
     "PD-0236": (
-        "Residential London junction with a zebra crossing, overcast daylight. A blue hatchback drives in from "
-        "the left across the zebra crossing. A black saloon turns fast out of the side road on the right "
-        "without slowing. The two cars collide front to front; bonnets crumple and a burst of glass and "
-        "plastic debris explodes into the air above the crossing."
+        "Overcast residential London junction with a zebra crossing. A blue hatchback drives in from the left "
+        "across the zebra crossing. A black saloon pulls fast out of the side road on the right over the give-way "
+        "lines without stopping. The two cars collide front to front and a burst of glass and plastic debris flies "
+        "into the air above the crossing."
     ),
 }
 
 
-def keyframe(claim: str) -> str:
+def still(claim: str) -> Image.Image:
     cfg = CLIPS[claim]
-    still = frame(Image.open(SRC / f"{cfg[0]}.jpg").convert("RGB"), cfg, 0)
+    return frame(Image.open(SRC / f"{cfg[0]}.jpg").convert("RGB"), cfg, 0)
+
+
+def b64(img: Image.Image, fmt: str = "JPEG") -> str:
     buf = io.BytesIO()
-    still.resize(REQUEST_SIZE, Image.LANCZOS).save(buf, "JPEG", quality=92)
+    img.save(buf, fmt, **({"quality": 92} if fmt == "JPEG" else {}))
     return base64.b64encode(buf.getvalue()).decode()
+
+
+def keyframe(img: Image.Image) -> dict:
+    data = b64(img.resize(REQUEST_SIZE, Image.LANCZOS))
+    return {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": data}}
+
+
+def crash_mask(claim: str) -> Image.Image:
+    row = next(c for c in json.loads((DATA / "claims.json").read_text()) if c["id"] == claim)
+    dets = json.loads((DATA / "detections.json").read_text())[CLIPS[claim][0]]["detections"]
+    cars = [dets[i]["box"] for f in row["findings"] if f["kind"] == "vehicle" for i in f["det"]]
+    x0, y0 = min(b[0] for b in cars), min(b[1] for b in cars)
+    x1, y1 = max(b[0] + b[2] for b in cars), max(b[1] + b[3] for b in cars)
+    bw, bh = x1 - x0, y1 - y0
+    w, h = SIZE
+    mask = Image.new("L", SIZE, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.rectangle(((x0 - 0.08 * bw) * w, (y0 - 0.06 * bh) * h, (x1 + 0.08 * bw) * w, (y1 + 0.1 * bh) * h), fill=255)
+    # Debris, shadows and headlight pools spread out below the impact.
+    draw.ellipse(((x0 - 0.3 * bw) * w, (y0 + 0.4 * bh) * h, (x1 + 0.4 * bw) * w, (y1 + 0.9 * bh) * h), fill=255)
+    return mask
+
+
+def clean_plate(bedrock, claim: str) -> Image.Image:
+    path = RAW / f"{claim}-start.png"
+    if not path.exists():
+        body = {"image": b64(still(claim), "PNG"), "mask": b64(crash_mask(claim), "PNG"), "grow_mask": 15, "output_format": "png"}
+        out = json.loads(bedrock.invoke_model(modelId=ERASE, body=json.dumps(body))["body"].read())
+        if out["finish_reasons"][0]:
+            raise RuntimeError(f"{claim}: erase refused: {out['finish_reasons'][0]}")
+        path.write_bytes(base64.b64decode(out["images"][0]))
+    return Image.open(path).convert("RGB")
 
 
 def submit(bedrock, claim: str, s3_uri: str) -> str:
     body = {
         "prompt": f"{CAMERA} {PROMPTS[claim]}",
         **SETTINGS,
-        "keyframes": {
-            "frame1": {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": keyframe(claim)}},
-        },
+        "keyframes": {"frame0": keyframe(clean_plate(bedrock, claim)), "frame1": keyframe(still(claim))},
     }
     for _ in range(20):
         try:
@@ -153,7 +202,7 @@ def download(s3, job: dict, claim: str) -> str:
     return f"s3://{bucket}/{key}"
 
 
-def process(claim: str) -> tuple[str, float]:
+def process(claim: str, trim: float) -> tuple[str, float]:
     raw = RAW / f"{claim}.mp4"
     probe = json.loads(subprocess.run(
         ["ffprobe", "-v", "error", "-select_streams", "v:0", "-count_packets",
@@ -163,6 +212,8 @@ def process(claim: str) -> tuple[str, float]:
     rate, count = probe["r_frame_rate"], int(probe["nb_read_packets"])
     num, den = map(int, rate.split("/"))
     fps = num / den
+    skip = round(trim * fps)
+    count -= skip
     w, h = SIZE
     decode = subprocess.Popen(
         ["ffmpeg", "-v", "error", "-i", str(raw), "-vf", f"scale={w}:{h}:flags=lanczos",
@@ -171,11 +222,14 @@ def process(claim: str) -> tuple[str, float]:
     )
     encode = subprocess.Popen(
         ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{w}x{h}",
-         "-framerate", rate, "-i", "-", "-c:v", "libx264", "-preset", "slow", "-crf", "26",
-         "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", str(OUT / f"{claim}.mp4")],
+         "-framerate", rate, "-i", "-", "-vf", "fps=15,noise=c0s=4:c0f=t", "-c:v", "libx264", "-preset", "slow",
+         "-crf", "26", "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", str(OUT / f"{claim}.mp4")],
         stdin=subprocess.PIPE,
     )
-    for i, buf in enumerate(iter(lambda: decode.stdout.read(w * h * 3), b"")):
+    frames = iter(lambda: decode.stdout.read(w * h * 3), b"")
+    for _ in range(skip):
+        next(frames)
+    for i, buf in enumerate(frames):
         # The still is the last frame, so the clock reads the incident time for the final second.
         offset = math.floor((i - count) / fps) + 1
         encode.stdin.write(frame(Image.frombytes("RGB", SIZE, buf), CLIPS[claim], offset).tobytes())
@@ -188,29 +242,36 @@ def process(claim: str) -> tuple[str, float]:
 
 
 def main() -> int:
-    args = sys.argv[1:]
-    process_only = "--process-only" in args
-    claims = [a for a in args if a.startswith("PD-")]
-    unknown = [c for c in claims if c not in PROMPTS]
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("claims", nargs="*", metavar="PD-XXXX")
+    parser.add_argument("--plates-only", action="store_true", help="build the erased start frames and stop")
+    parser.add_argument("--process-only", action="store_true", help="rebuild clips from the raw downloads")
+    parser.add_argument("--trim", type=float, help="seconds to cut from the start, e.g. where a car pops in")
+    args = parser.parse_args()
+    unknown = [c for c in args.claims if c not in PROMPTS]
     if unknown:
-        print("no prompt for", ", ".join(unknown))
-        return 2
-    if process_only and not claims:
-        claims = sorted(p.stem for p in RAW.glob("PD-*.mp4"))
+        parser.error("no prompt for " + ", ".join(unknown))
+    claims = args.claims or (sorted(p.stem for p in RAW.glob("PD-????.mp4")) if args.process_only else [])
     if not claims:
-        print(__doc__)
+        parser.print_help()
         return 2
     OUT.mkdir(parents=True, exist_ok=True)
     RAW.mkdir(parents=True, exist_ok=True)
-    path = OUT / "manifest.json"
-    manifest = json.loads(path.read_text()) if path.exists() else {}
-    if not process_only:
+    if not args.process_only:
         session = boto3.Session(region_name=REGION)
         bedrock, s3 = session.client("bedrock-runtime"), session.client("s3")
+    if args.plates_only:
+        for claim in claims:
+            clean_plate(bedrock, claim)
+            print(claim, "start frame", (RAW / f"{claim}-start.png").relative_to(ROOT))
+        return 0
+    if not args.process_only:
         account = session.client("sts").get_caller_identity()["Account"]
         s3_uri = os.environ.get("LUMA_S3_URI", f"s3://dk-bedrock-video-{account}-{REGION}/poodle").rstrip("/")
+    path = OUT / "manifest.json"
+    manifest = json.loads(path.read_text()) if path.exists() else {}
     for claim in claims:
-        if not process_only:
+        if not args.process_only:
             arn = submit(bedrock, claim, s3_uri)
             print(claim, "submitted", arn)
             job = wait(bedrock, claim, arn)
@@ -223,13 +284,16 @@ def main() -> int:
                 "model": MODEL,
                 "region": REGION,
                 "prompt": f"{CAMERA} {PROMPTS[claim]}",
-                "settings": {**SETTINGS, "keyframe": "frame1"},
+                "settings": {**SETTINGS, "frame0": "still with the crashed cars erased", "frame1": "still"},
                 "invocationArn": arn,
                 "output": download(s3, job, claim),
                 "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             }
-        starts, duration = process(claim)
-        manifest.setdefault(claim, {}).update(startsAt=starts, duration=round(duration, 2))
+        entry = manifest.setdefault(claim, {})
+        if args.trim is not None:
+            entry["trim"] = args.trim
+        starts, duration = process(claim, entry.get("trim", 0))
+        entry.update(startsAt=starts, duration=round(duration, 2))
         path.write_text(json.dumps(manifest, indent=1) + "\n")
         print(claim, "ok", f"{duration:.1f}s")
     return 0

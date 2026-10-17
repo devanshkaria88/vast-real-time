@@ -6,10 +6,10 @@ created_by: cursor
 status: in-progress
 scope: server/tools,poodle/media,.env.example,README.md
 created_at: 2026-10-17T13:10:40Z
-updated_at: 2026-10-17T13:15:00Z
+updated_at: 2026-10-17T13:46:13Z
 current_executor: cursor
 last_agent: cursor
-last_summary: Luma Ray v2 provisioned in us-west-2 (agreement AVAILABLE); output bucket dk-bedrock-video-762233742141-us-west-2 created; plan filled
-next_action: Write server/tools/luma_videos.py and smoke test PD-0147
+last_summary: Locked-camera clips shipped for PD-0147 and PD-0226 (erased start frame + evidence still end, trimmed). PD-0219 rejected. ~$52.80 spent over 7 Ray2 takes
+next_action: Ask the builder whether to re-roll more claims (540p) or wire the two clips into the desk
 plan: plan.md
 activity: activity.md

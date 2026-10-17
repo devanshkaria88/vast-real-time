@@ -12,3 +12,15 @@ after reading this plan and activity history.
 Luma Ray v2 provisioned in us-west-2 (agreement AVAILABLE); output bucket dk-bedrock-video-762233742141-us-west-2 created; plan filled
 
 **Next action:** Write server/tools/luma_videos.py and smoke test PD-0147
+
+## 2026-10-17T13:32:53Z · cursor · in-progress
+
+PD-0147 v1 (end frame only) moved the camera; v2 (erased start + still end) locked the camera but blue car pops in early; v3 timing prompt chaotic. Testing start-frame-only v4. Spend so far ~$22.80
+
+**Next action:** Inspect PD-0147 v4; pick start-only or v2, then run PD-0219, PD-0226, PD-0204
+
+## 2026-10-17T13:46:13Z · cursor · in-progress
+
+Locked-camera clips shipped for PD-0147 and PD-0226 (erased start frame + evidence still end, trimmed). PD-0219 rejected. ~$52.80 spent over 7 Ray2 takes
+
+**Next action:** Ask the builder whether to re-roll more claims (540p) or wire the two clips into the desk

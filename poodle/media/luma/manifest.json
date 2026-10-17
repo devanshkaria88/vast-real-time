@@ -4,18 +4,41 @@
   "still": "8CCDa",
   "model": "luma.ray-v2:0",
   "region": "us-west-2",
-  "prompt": "Fixed elevated CCTV camera, static wide shot, no camera movement, realistic security camera footage. Suburban London crossroads with traffic lights, overcast daylight. A blue hatchback pulls out of the side road on the left into the junction. A red hatchback speeds down the main road from the distance, runs the red light and smashes into the front of the blue car in the middle of the junction. Bonnets crumple, glass and plastic debris scatter across the tarmac and both cars jolt to a stop nose to nose. A dark grey car behind brakes and stops.",
+  "prompt": "Real CCTV traffic camera recording: grainy surveillance video from a fixed camera on a pole, locked-off static shot, the camera never moves, pans or zooms. Ordinary real-time traffic speed, no slow motion, no cuts. Overcast suburban London crossroads. The main-road traffic lights stay red the whole time and a dark grey car waits at them. A blue hatchback drives out of the side road on the left and crosses the junction on its green light. A red hatchback comes down the main road from the distance, goes past the waiting grey car, runs the red light and crashes into the front of the blue car in the middle of the junction. Glass and plastic scatter and both cars stop nose to nose.",
   "settings": {
    "aspect_ratio": "4:3",
    "resolution": "720p",
    "duration": "5s",
    "loop": false,
-   "keyframe": "frame1"
+   "frame0": "still with the crashed cars erased",
+   "frame1": "still"
   },
-  "invocationArn": "arn:aws:bedrock:us-west-2:762233742141:async-invoke/npawee559p2q",
-  "output": "s3://dk-bedrock-video-762233742141-us-west-2/poodle/PD-0147/npawee559p2q/output.mp4",
-  "generatedAt": "2026-10-17T13:20:04+00:00",
-  "startsAt": "2026-10-16T17:32:13",
-  "duration": 5.21
+  "invocationArn": "arn:aws:bedrock:us-west-2:762233742141:async-invoke/rij7qeqylwpn",
+  "output": "s3://dk-bedrock-video-762233742141-us-west-2/poodle/PD-0147/rij7qeqylwpn/output.mp4",
+  "generatedAt": "2026-10-17T13:28:00+00:00",
+  "trim": 0.5,
+  "startsAt": "2026-10-16T17:32:14",
+  "duration": 4.71
+ },
+ "PD-0226": {
+  "clip": "media/luma/PD-0226.mp4",
+  "still": "vDVdk",
+  "model": "luma.ray-v2:0",
+  "region": "us-west-2",
+  "prompt": "Real CCTV traffic camera recording: grainy surveillance video from a fixed camera on a pole, locked-off static shot, the camera never moves, pans or zooms. Ordinary real-time traffic speed, no slow motion, no cuts. Night at a quiet London junction under street lights, dry road. A blue hatchback with its headlights on drives in from the left edge of the frame along the main road. A red hatchback with its headlights on comes down the side road at the top and rolls straight over the give-way lines without stopping, into the blue car's path. A low-speed bump: the fronts touch, a few fragments fall and both cars stop.",
+  "settings": {
+   "aspect_ratio": "4:3",
+   "resolution": "720p",
+   "duration": "5s",
+   "loop": false,
+   "frame0": "still with the crashed cars erased",
+   "frame1": "still"
+  },
+  "invocationArn": "arn:aws:bedrock:us-west-2:762233742141:async-invoke/7182j2lceuum",
+  "output": "s3://dk-bedrock-video-762233742141-us-west-2/poodle/PD-0226/7182j2lceuum/output.mp4",
+  "generatedAt": "2026-10-17T13:43:55+00:00",
+  "trim": 0.2,
+  "startsAt": "2026-10-13T22:41:28",
+  "duration": 5.0
  }
 }
