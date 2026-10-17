@@ -1,0 +1,62 @@
+{
+  "_comment": "Per-frame questions for scripts/jev_video_triage.py. `frame` is the current still; `previous_frame` exists only with --previous. Keep every question and threshold in this one file so a reviewer sees them together. Thresholds are starting points: calibrate on labelled frames.",
+  "model": "jev-1.14.0",
+  "thresholds": {
+    "person_present": 0.5,
+    "person_at_height": 0.6,
+    "unsafe_act": 0.7,
+    "missing_helmet_present": 0.6,
+    "arrival": 0.6,
+    "fall": 0.7
+  },
+  "questions": {
+    "person_present": {
+      "type": "noul",
+      "instructions": "Is at least one person visible in `frame`?"
+    },
+    "person_at_height": {
+      "type": "noul",
+      "instructions": "Is a person in `frame` standing on a ladder, scaffold, roof or other raised platform?",
+      "criteria": {"true": "a person's feet are clearly above ground level on a structure", "false": "everyone is on the ground, or no person is visible"}
+    },
+    "unsafe_act": {
+      "type": "noul",
+      "instructions": "Does `frame` show a person doing something clearly unsafe, such as working at height without a harness, walking under a suspended load, or standing in a moving vehicle's path?",
+      "criteria": {"true": "a clearly unsafe act is visible", "false": "nothing unsafe is visible, or no person is visible"}
+    },
+    "scene": {
+      "type": "choice",
+      "instructions": "What best describes `frame`?",
+      "criteria": {
+        "people_working": "one or more people doing physical work",
+        "people_idle": "people present but not working",
+        "vehicle_moving": "a vehicle or machine is moving",
+        "empty": "no people and no moving machines",
+        "unclear": "too dark, blurred or obstructed to tell"
+      }
+    },
+    "severity": {
+      "type": "score",
+      "instructions": "How urgently should a site supervisor look at `frame`?",
+      "criteria": ["routine, nothing to act on", "worth a look later today", "look now", "stop work immediately"]
+    },
+    "missing_helmet_present": {
+      "type": "noul",
+      "instructions": "Is there a person in `frame` who is not wearing a hard hat?"
+    },
+    "missing_helmet_person": {
+      "type": "box",
+      "instructions": "the person in `frame` who is not wearing a hard hat"
+    }
+  },
+  "change_questions": {
+    "arrival": {
+      "type": "noul",
+      "instructions": "Compared with `previous_frame`, has a new person entered the scene in `frame`?"
+    },
+    "fall": {
+      "type": "noul",
+      "instructions": "Compared with `previous_frame`, has a person in `frame` fallen or collapsed?"
+    }
+  }
+}

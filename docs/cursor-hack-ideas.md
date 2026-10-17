@@ -28,9 +28,19 @@ Source: https://docs.nvidia.com/vss/latest/warehouse-docs/agents.html
 
 ## Idea 1 — Lone Job
 
-### The person
+### Use-case
 
-A night engineer services equipment alone. No colleague is in the room. The employer already stores old job videos. Nobody watches them.
+A facilities firm maintains the air-conditioning plant on office roofs. One engineer does the night visit. He is alone in the plant room.
+
+Last month, an engineer closed a metal access panel with a screwdriver still on the frame. The fan struck the tool. The motor failed. The firm has that night's body-camera video in storage. Nobody watched the video until the motor invoice arrived.
+
+Tonight, a second engineer does the same job. He wears a camera. For the demo, the camera is the laptop webcam, and a cardboard box is the panel.
+
+He changes the filter. The web page stays blank. He sets the screwdriver on the frame and reaches for the panel screws. The page then shows one sentence: "Stop. The tool is still on the frame." Beside the sentence, the old video plays at the second where the first engineer lifts the screwdriver out and then closes the panel.
+
+He picks up the screwdriver. He closes the panel. The page goes blank again.
+
+The operations director pays for this. One missed tool can cost a motor, a return visit, and an injury report. The director already pays for a lone-worker alarm. That alarm only sends help after the engineer presses a button. This agent watches the job.
 
 ### The buyer
 
@@ -75,9 +85,19 @@ Do not build glasses, accounts, a mobile app, or a second agent. Do not show a s
 
 ## Idea 2 — Return Stop
 
-### The person
+### Use-case
 
-A customer builds or installs a product at home. She is about to power it on in the wrong state. The company receives many return videos. Staff do not watch them. Many returns have no fault. The part was seated wrong.
+A small PC company sells a desktop kit. Customers build it at home. In one week, 20 customers return the PC and say that it is dead. The warehouse tests the 20 PCs. Sixteen of them work when a technician pushes the memory card down until the two side clips click shut. Four PCs have a real board fault.
+
+Each customer sent a short video with the return. The videos sit in a folder. The support team does not have time to watch them.
+
+On Monday, the head of returns opens one web page. She does not type a question. The page says: "16 of 20 return videos show the same fault. The memory clips are open. 4 videos show a different fault." She can play the second where the clips are still up.
+
+A new customer then starts a build on camera. For the demo, this customer is at the table, and the camera is the laptop webcam. She pushes the memory card in, but the side clips stay up. She moves her hand to the power button. The page says: "Stop. Close the memory clips before you switch the power on." It plays the old return video at the second where the clips click shut.
+
+She closes the clips. She switches the power on. The PC starts. The company keeps the PC and the shipping cost.
+
+The head of returns pays for this. She pays because 16 good PCs came back as dead.
 
 ### The buyer
 

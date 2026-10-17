@@ -30,3 +30,15 @@ Wrote docs/cursor-hack-ideas.md with two ideas, Lone Job and Return Stop, after 
 Wrote docs/cursor-hack-ideas.md with Lone Job and Return Stop after judge research and novelty checks
 
 **Next action:** Wait for the builder to choose Lone Job or Return Stop.
+
+## 2026-10-17T10:42:41Z · cursor · in-progress
+
+Added a concrete use-case for Lone Job and Return Stop in docs/cursor-hack-ideas.md.
+
+**Next action:** Wait for the builder to choose Lone Job or Return Stop.
+
+## 2026-10-17T10:42:47Z · cursor · in-progress
+
+Added a concrete use-case for Lone Job and Return Stop
+
+**Next action:** Wait for the builder to choose Lone Job or Return Stop.
