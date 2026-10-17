@@ -18,3 +18,9 @@ Plan filled. README, IDEA.md, hack-plan, services.py, engine.py, watch.py, tfl.p
 Takeover from claude-code. User asked Cursor directly to write the submission form text Previous checkpoint by claude-code: Plan filled. README, IDEA.md, hack-plan, services.py, engine.py, watch.py, tfl.py read.
 
 **Next action:** Fetch the hackathon form technology list, then run the draft and verify workflow
+
+## 2026-10-17T15:10:11Z · cursor · completed
+
+docs/submission.md: one-sentence description (221/300) and project description (1,448/1,500) in plain English, no em dashes, plus a technology-to-code table. Fact-checked: Codex dropped (no commits), Cosmos/W&B/VastDB stated as wired but not run with credentials.
+
+**Next action:** No further action; task completed.

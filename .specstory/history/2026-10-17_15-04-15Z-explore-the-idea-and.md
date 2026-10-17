@@ -7110,3 +7110,83 @@ poodle/app.css:618:.poodle.mood-happy .eyes-happy, .poodle.mood-happy .mouth-hap
 _**Agent (claude-fable-5-1 2026-10-17 15:09:53Z)**_
 
 Nothing else can move until the workflow reports. Its map, draft, judge and verify phases are running in the background now, and I'll write up the two answers as soon as it returns.
+
+_**Agent - sidechain (claude-fable-5-1 2026-10-17 15:09:54Z)**_
+
+<tool-use data-tool-type="shell" data-tool-name="Bash"><details>
+<summary>Tool use: **Bash**</summary>
+Incident view header, scanner panel, dialog
+
+`sed -n '60,72p;73,96p;237,268p' poodle/js/incidents.js`
+
+```text
+  const tab = TABS[opts.tab] ? opts.tab : "all";
+  return `
+    <header class="vh">${menuBtn}
+      <div class="vh-title">${icon("archive", 15)}<span>Incident library</span><span class="faint num" data-total>${data.items.length}</span></div>
+      <div class="tabs" role="tablist" data-tabs>${tabs(data, tab)}</div>
+      <div class="vh-actions"><a class="btn btn-ghost" href="/library/incidents.json" download="poodle-incidents.json" title="Every incident with its frames, clips and Jev answers">${icon("download", 14)}<span class="label">Export</span></a></div>
+    </header>
+    <div class="view">
+      <div class="lib-top"><section class="scanner" data-scanner aria-label="Background scanner">${scannerPanel(watch)}</section></div>
+      <div data-lib-list>${libraryList(data, watch, opts)}</div>
+    </div>`;
+}
+
+export function scannerPanel(w) {
+  if (w.state === "off") {
+    return `<div class="scan-off">${icon("cctv", 18)}<div><b>The background scanner is off.</b><span>${esc(w.reason)}</span></div></div>`;
+  }
+  const paused = w.state === "paused";
+  const open = w.rules.thresholds.open;
+  const tiles = w.recent.map((r) => {
+    const hot = r.incident >= open && w.rules.kinds.includes(r.kind);
+    const dim = r.usable < w.rules.thresholds.usable;
+    return `<div class="scan-tile${hot ? " hot" : ""}${dim ? " dim" : ""}" title="${esc(r.name)}: ${esc(kindLabel(r.kind))}, incident ${r.incident.toFixed(2)}, judged ${esc(fmt.time(r.at))}">
+      <img src="/api/watch/frames/${esc(r.sha)}" alt="" onerror="this.style.visibility='hidden'">
+      <span class="meta"><b>${esc(r.name)}</b><span class="k">${esc(kindLabel(r.kind))}</span><span class="p num">${r.incident.toFixed(2)}</span></span></div>`;
+  }).join("");
+  return `
+    <div class="scan-h">
+      <span class="scan-state ${esc(w.state)}"><i></i>${esc(STATE_LABEL[w.state] || w.state)}</span>
+      <span class="scan-stats"><b class="num">${w.watching}</b> cameras · <b class="num">${w.perMinute}</b> frames a minute · <b class="num">${w.judgedToday.toLocaleString("en-GB")}</b> judged today · <b class="num">$${w.costToday.toFixed(2)}</b> of Jev today${w.budget ? ` of $${w.budget.toFixed(2)}` : ""}</span>
+      <button class="btn" data-watch="${paused ? "resume" : "pause"}">${icon(paused ? "play" : "pause", 12)}${paused ? "Resume" : "Pause"}</button>
+    </div>
+    ${w.reason ? `<p class="scan-note">${esc(w.reason)}${w.lastError && w.state === "backoff" ? ` ${esc(w.lastError.text)}` : ""}</p>` : ""}
+    <div class="scan-strip">${tiles || `<span class="faint">Waiting for the first frames.</span>`}</div>
+    <p class="scan-rule">Jev (${esc(w.model || "jev")}) judges each new still once. An incident opens at <code>incident</code> ≥ ${open} with an incident kind, is confirmed by ${w.rules.confirmFrames} frames and clears after ${w.rules.clearFrames} quiet frames. Powered by TfL Open Data.</p>`;
+}
+
+export function incidentDialog(inc) {
+  const rules = inc.rules;
+  const peak = inc.frames[inc.peakFrame] || inc.frames[0];
+  const strip = [...inc.frames.map((f) => [f, fmt.time(f.takenAt)]), ...(inc.after ? [[inc.after, "After"]] : [])];
+  const label = inc.review?.label;
+  return `
+  <div class="dialog inc-dialog" role="dialog" aria-modal="true" aria-label="${esc(kindLabel(inc.kind))} at ${esc(inc.cam.name)}">
+    <div class="dialog-h">${icon(kindIcon(inc.kind), 15)}${esc(kindLabel(inc.kind))} <span class="muted trunc">${esc(inc.cam.name)} · ${esc(inc.id)}</span>
+      <button class="icon-btn" data-close aria-label="Close (Esc)">${icon("x")}</button></div>
+    <div class="dialog-body">
+      <div>
+        <div class="player" id="inc-player">${frameView(peak, inc, rules)}</div>
+        <div class="filmstrip" aria-label="Frames and clips">
+          ${strip.map(([f, text], n) => `<button class="film-frame" data-frame="${n}" aria-pressed="${f === peak}" aria-label="Show the still from ${esc(text)}"><img src="/library/frames/${esc(f.file)}" alt=""><span>${esc(text)}</span></button>`).join("")}
+          ${inc.clips.map((c, n) => `<button class="film-frame clip" data-clip="${n}" aria-pressed="false" aria-label="Play clip ${n + 1}"><span class="film-ic">${icon("film", 16)}</span><span>Clip ${esc(c.takenAt ? fmt.time(c.takenAt) : String(n + 1))}</span></button>`).join("")}
+        </div>
+        <p class="faint" style="margin:8px 0 0" data-caption>${esc(frameCaption(peak))}</p>
+      </div>
+      <div class="cam-side">
+        ${props(inc)}
+        <div data-answers>${answersPanel(peak, rules)}</div>
+        <div class="review-btns">
+          <button class="btn" data-review="verified" aria-pressed="${label === "verified"}">${icon("check", 14)}Real incident</button>
+          <button class="btn" data-review="dismissed" aria-pressed="${label === "dismissed"}">${icon("x", 14)}Not an incident</button>
+        </div>
+        <button class="btn" data-live>${icon("cctv", 14)}Open the live camera</button>
+        <p class="faint" style="margin:0">Your review is stored with the incident and becomes a labelled example for tuning the thresholds.</p>
+      </div>
+    </div>
+  </div>`;
+}
+```
+</details></tool-use>
