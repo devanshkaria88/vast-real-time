@@ -12,3 +12,9 @@ after reading this plan and activity history.
 Plan filled. Repo is a dependency-free taskboard; Cloud start will forward post-commit without replacing core.hooksPath.
 
 **Next action:** Validate install and start, then exercise the taskboard CLI
+
+## 2026-10-17T11:36:40Z · cursor · in-progress
+
+Install ran twice and start linked a post-commit forwarder without changing core.hooksPath.
+
+**Next action:** Exercise taskboard guard and confirm a commit is pushed

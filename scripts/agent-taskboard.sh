@@ -458,11 +458,26 @@ EOF
   exit 2
 }
 
+# True when this clone will run .githooks/post-commit. Cloud Agents keep
+# core.hooksPath on Cursor's dispatcher and drop a forwarder in that directory;
+# git does not consult .git/hooks while core.hooksPath is set.
+push_on_commit_enabled() {
+  local current
+  current=$(git -C "$ROOT_DIR" config core.hooksPath 2>/dev/null || true)
+  if [[ "$current" == ".githooks" || "$current" == "$ROOT_DIR/.githooks" ]]; then
+    return 0
+  fi
+  if [[ -n "$current" && -f "$current/post-commit" ]] && grep -qF '.githooks/post-commit' "$current/post-commit" 2>/dev/null; then
+    return 0
+  fi
+  return 1
+}
+
 git_notes() {
   local gitdir state
   gitdir=$(git -C "$ROOT_DIR" rev-parse --absolute-git-dir 2>/dev/null) || return 0
   git -C "$ROOT_DIR" remote get-url origin >/dev/null 2>&1 || return 0
-  if [[ -f "$ROOT_DIR/.githooks/post-commit" && "$(git -C "$ROOT_DIR" config core.hooksPath 2>/dev/null)" != ".githooks" ]]; then
+  if [[ -f "$ROOT_DIR/.githooks/post-commit" ]] && ! push_on_commit_enabled; then
     echo "! Push-on-commit is not enabled in this clone. Run: $SELF setup"
   fi
   [[ -f "$gitdir/autopush.status" ]] || return 0
