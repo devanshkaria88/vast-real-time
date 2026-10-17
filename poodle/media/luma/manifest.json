@@ -1,0 +1,21 @@
+{
+ "PD-0147": {
+  "clip": "media/luma/PD-0147.mp4",
+  "still": "8CCDa",
+  "model": "luma.ray-v2:0",
+  "region": "us-west-2",
+  "prompt": "Fixed elevated CCTV camera, static wide shot, no camera movement, realistic security camera footage. Suburban London crossroads with traffic lights, overcast daylight. A blue hatchback pulls out of the side road on the left into the junction. A red hatchback speeds down the main road from the distance, runs the red light and smashes into the front of the blue car in the middle of the junction. Bonnets crumple, glass and plastic debris scatter across the tarmac and both cars jolt to a stop nose to nose. A dark grey car behind brakes and stops.",
+  "settings": {
+   "aspect_ratio": "4:3",
+   "resolution": "720p",
+   "duration": "5s",
+   "loop": false,
+   "keyframe": "frame1"
+  },
+  "invocationArn": "arn:aws:bedrock:us-west-2:762233742141:async-invoke/npawee559p2q",
+  "output": "s3://dk-bedrock-video-762233742141-us-west-2/poodle/PD-0147/npawee559p2q/output.mp4",
+  "generatedAt": "2026-10-17T13:20:04+00:00",
+  "startsAt": "2026-10-16T17:32:13",
+  "duration": 5.21
+ }
+}
