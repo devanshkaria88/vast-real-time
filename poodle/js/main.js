@@ -48,8 +48,6 @@ function renderSidebar() {
   const libCount = !w ? ""
     : w.open ? `<span class="count hot" title="${w.open} open now, ${w.incidents} in the library">${w.open}</span>`
     : `<span class="count" title="${w.incidents} in the library">${w.incidents}</span>`;
-  const svc = state.health?.services || [];
-  const live = state.health?.mode === "live";
   sidebar.innerHTML = `
     <div class="ws"><span class="ws-mark">${POODLE_MARK}</span>Poodle<span class="ws-sub">Claims</span></div>
     <button class="search-btn" data-cmdk>${icon("search", 14)}<span>Search or jump to</span><kbd>⌘K</kbd></button>
@@ -61,12 +59,7 @@ function renderSidebar() {
       <div class="nav-label">Monitoring</div>
       <a class="nav-item" href="#/cameras" ${camsHere}>${icon("cctv", 15)}Live cameras<span class="live-dot" title="Live TfL feed"></span></a>
       <a class="nav-item" href="#/incidents" ${libHere}>${icon("archive", 15)}Incident library${libCount}</a>
-    </nav>
-    <div class="services" aria-label="Services">
-      <div class="services-h"><span>Services</span><span class="mode-chip${live ? " live" : ""}" title="${live ? "Every service is live" : "Services that are not connected run from recorded data"}">${live ? "Live" : "Replay mode"}</span></div>
-      ${svc.map((s) => `<div class="svc" title="${esc(s.role)}: ${esc(s.detail)}"><span class="dot ${s.status}"></span><b>${esc(s.name)}</b><span>${esc(s.detail)}</span></div>`).join("")}
-      <div class="attrib">Powered by TfL Open Data</div>
-    </div>`;
+    </nav>`;
 }
 
 // ---------------------------------------------------------------- router

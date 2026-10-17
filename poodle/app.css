@@ -127,18 +127,6 @@ kbd {
 .nav-item .count.hot { color: var(--orange); }
 .nav-item .live-dot { margin-left: auto; }
 
-.services { margin-top: auto; padding: 10px 8px 6px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
-.services-h { display: flex; align-items: center; justify-content: space-between; color: var(--text-4); font-size: 12px; font-weight: 510; margin-bottom: 2px; }
-.mode-chip { padding: 1px 6px; border-radius: var(--radius-4); background: var(--bg-3); color: var(--text-3); font-size: 11px; font-weight: 510; }
-.mode-chip.live { color: var(--green); }
-.svc { display: flex; align-items: center; gap: 8px; height: 22px; color: var(--text-3); font-size: 12px; }
-.svc b { color: var(--text-2); font-weight: 510; white-space: nowrap; }
-.svc span:last-child { flex: 1; min-width: 0; text-align: right; color: var(--text-4); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-4); flex: 0 0 auto; }
-.dot.live { background: var(--green); box-shadow: 0 0 0 3px color-mix(in srgb, var(--green), transparent 82%); }
-.dot.replay { background: transparent; border: 1px solid var(--text-4); }
-.attrib { padding: 6px 8px 0; color: var(--text-4); font-size: 11px; }
-
 .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse 2s var(--ease) infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
