@@ -12,3 +12,9 @@ after reading this plan and activity history.
 Plan filled. README, IDEA.md, hack-plan, services.py, engine.py, watch.py, tfl.py read.
 
 **Next action:** Fetch the hackathon form technology list, then run the draft and verify workflow
+
+## 2026-10-17T15:09:13Z · cursor · in-progress
+
+Takeover from claude-code. User asked Cursor directly to write the submission form text Previous checkpoint by claude-code: Plan filled. README, IDEA.md, hack-plan, services.py, engine.py, watch.py, tfl.py read.
+
+**Next action:** Fetch the hackathon form technology list, then run the draft and verify workflow
