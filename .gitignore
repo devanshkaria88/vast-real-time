@@ -12,3 +12,7 @@ build/
 agent-coordination/active/
 agent-coordination/.write-lock/
 agent-coordination/.taskboard.*
+
+# Python bytecode
+__pycache__/
+*.pyc

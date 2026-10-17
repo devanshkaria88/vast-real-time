@@ -43,3 +43,5 @@ the ranked ideas, the selected idea, the 6-hour build plan, and the demo and pit
 
 - 2026-10-17T10:15:59Z — Task created. Fill this plan before modifying scoped files.
 - 2026-10-17T10:17:00Z — Plan filled. Research workflow `wf_9937e683-2fb` started with 7 researchers, 3 ideators, 2 judges, 2 verifiers.
+- 2026-10-17T11:50:00Z — Scope widened at the builder's request: added the `jev-decisions` skill (TypeSafe Jev 1.14.0) under `.agents/skills/`, `.claude/skills/`, `.cursor/skills/` and listed it in `AGENTS.md`. Scripts validated with dry runs and a local mock server; no live Jev key on this machine yet.
+- 2026-10-17T11:50:00Z — Research workflow failed once on a transient TLS error in 4 agents (self-signed certificate on the venue network); script patched to tolerate null judge results and resumed as `wdb0i50jk` with the 7 cached research results.

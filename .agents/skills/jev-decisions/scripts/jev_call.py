@@ -54,8 +54,11 @@ def default_model(backend: str) -> str:
 
 def image_asset(path: str) -> tuple[str, dict[str, str]]:
     """Read a PNG or JPEG file and return (reference, asset entry) for the `assets` map."""
-    with open(path, "rb") as f:
-        data = f.read()
+    try:
+        with open(path, "rb") as f:
+            data = f.read()
+    except OSError as e:
+        raise JevError(f"cannot read image {path}: {e.strerror}") from None
     if data[:8] == b"\x89PNG\r\n\x1a\n":
         fmt = "png"
     elif data[:3] == b"\xff\xd8\xff":

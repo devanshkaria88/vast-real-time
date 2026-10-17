@@ -30,3 +30,21 @@ Takeover from claude-code. Agent continuation requested. Previous checkpoint by 
 Takeover from cursor. Mistaken takeover by cursor. Return this task to claude-code. Cursor will use a separate task. Previous checkpoint by cursor: Taken over from claude-code. Agent continuation requested.
 
 **Next action:** Write docs/hack-plan.md from the workflow result
+
+## 2026-10-17T10:45:06Z · claude-code · in-progress
+
+Added jev-decisions skill (SKILL.md, 3 references, 2 stdlib scripts, example questions) in .agents/.claude/.cursor skills and AGENTS.md; validated with dry runs and a mock server. Research workflow resumed after a TLS blip.
+
+**Next action:** Write docs/hack-plan.md when the ideation workflow completes
+
+## 2026-10-17T10:48:09Z · claude-code · in-progress
+
+Wrote docs/hack-plan.md: research, judge table, stack facts, both inspirations with verdicts, 5 candidate ideas, interim pick RackWitness with a 4.5-hour build plan, pitch and sanity checks. Judge panel and novelty verification still running.
+
+**Next action:** Update docs/hack-plan.md with the panel ranking and verdicts when the workflow completes
+
+## 2026-10-17T10:49:04Z · claude-code · in-progress
+
+jev-decisions skill added and validated; docs/hack-plan.md written with interim pick RackWitness; idea panel rerun in progress
+
+**Next action:** Update docs/hack-plan.md with the panel ranking and verdicts when the workflow completes
