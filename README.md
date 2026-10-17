@@ -1,3 +1,5 @@
+# REAL-TIME VIDEO AGENTS HACKATHON
+
 # vast-real-time
 
 Hackathon project, bootstrapped with `hackathon-init`.
