@@ -1,0 +1,32 @@
+{
+  "wording": {
+    "S1": {"title": "Section 1: Damage to your car", "text": "We cover loss of or damage to your car caused by accident, up to its market value, less the excess. Comprehensive cover only."},
+    "S2": {"title": "Section 2: Liability to others", "text": "We cover your legal liability for injury to others and damage to their property. All cover levels."},
+    "S3": {"title": "Section 3: Fire and theft", "text": "We cover loss or damage caused by fire, theft or attempted theft. Comprehensive and third party, fire and theft."},
+    "S6": {"title": "Section 6: No-claims discount", "text": "Your discount is not affected by a claim where we recover all our costs from someone else, or where protected no-claims discount is on your schedule."},
+    "E1": {"title": "General exclusion 1: Driver not insured", "text": "No cover while your car is driven by anyone not named on your certificate and schedule."},
+    "E2": {"title": "General exclusion 2: Use not permitted", "text": "No cover while your car is used for hire, reward or delivery unless your certificate permits it."},
+    "E4": {"title": "General exclusion 4: Racing", "text": "No cover while your car is used for racing, pace-making or speed testing."},
+    "E6": {"title": "General exclusion 6: Territory", "text": "No cover outside Great Britain, Northern Ireland, the Isle of Man and the Channel Islands."},
+    "B1": {"title": "Add-on: Courtesy car", "text": "A small courtesy car while your car is repaired by our approved repairer, if the add-on is on your schedule."},
+    "B2": {"title": "Add-on: Motor legal expenses", "text": "Up to £100,000 of legal costs to recover uninsured losses from the person at fault, if the add-on is on your schedule."}
+  },
+  "rules": {
+    "HC172": {"title": "Highway Code rule 172", "text": "You must give way to traffic on the main road when emerging from a junction with broken white lines across the road."},
+    "HC175": {"title": "Highway Code rule 175", "text": "You must stop behind the white stop line across your side of the road unless the light is green."},
+    "HC185": {"title": "Highway Code rule 185", "text": "On reaching a roundabout, give priority to traffic approaching from your right, unless signs, markings or lights say otherwise."},
+    "HC126": {"title": "Highway Code rule 126", "text": "Drive at a speed that lets you stop well within the distance you can see to be clear, and leave enough space to the vehicle in front."},
+    "HC133": {"title": "Highway Code rule 133", "text": "Before changing lane, check mirrors and make sure you will not force another road user to change course or speed."},
+    "HC103": {"title": "Highway Code rule 103", "text": "Signals warn and inform other road users. Give clear signals in plenty of time."}
+  },
+  "policies": {
+    "POL-88213": {"holder": "Amara Okafor", "cover": "comprehensive", "excess": {"compulsory": 250, "voluntary": 100}, "namedDrivers": ["Amara Okafor"], "vehicle": {"reg": "LK19 XYT", "make": "Ford Focus", "colour": "Blue", "value": 9800}, "start": "2026-03-01", "end": "2027-02-28", "territory": "UK", "addOns": ["legal_expenses"], "autoSettle": 1500},
+    "POL-90417": {"holder": "Daniel Moore", "cover": "third_party_only", "excess": {"compulsory": 250, "voluntary": 0}, "namedDrivers": ["Daniel Moore"], "vehicle": {"reg": "YD68 KFM", "make": "Vauxhall Corsa", "colour": "Red", "value": 6200}, "start": "2026-01-12", "end": "2027-01-11", "territory": "UK", "addOns": [], "autoSettle": 1500},
+    "POL-77120": {"holder": "Marcus Bell", "cover": "comprehensive", "excess": {"compulsory": 300, "voluntary": 100}, "namedDrivers": ["Marcus Bell", "Leah Bell"], "vehicle": {"reg": "LR21 HHA", "make": "Kia Sportage", "colour": "Black", "value": 17500}, "start": "2026-06-04", "end": "2027-06-03", "territory": "UK", "addOns": ["courtesy_car"], "autoSettle": 1500},
+    "POL-81544": {"holder": "Sofia Rossi", "cover": "comprehensive", "excess": {"compulsory": 250, "voluntary": 50}, "namedDrivers": ["Sofia Rossi"], "vehicle": {"reg": "LB70 PZE", "make": "Volkswagen Golf", "colour": "Blue", "value": 14200}, "start": "2026-09-01", "end": "2027-08-31", "territory": "UK", "addOns": ["courtesy_car", "legal_expenses"], "autoSettle": 1500},
+    "POL-86032": {"holder": "Ian Fletcher", "cover": "comprehensive", "excess": {"compulsory": 250, "voluntary": 100}, "namedDrivers": ["Ian Fletcher", "Grace Fletcher"], "vehicle": {"reg": "EK18 RNU", "make": "Seat Ibiza", "colour": "Red", "value": 7400}, "start": "2026-02-20", "end": "2027-02-19", "territory": "UK", "addOns": ["legal_expenses"], "autoSettle": 1500},
+    "POL-79968": {"holder": "Hannah Clarke", "cover": "comprehensive", "excess": {"compulsory": 150, "voluntary": 50}, "namedDrivers": ["Hannah Clarke"], "vehicle": {"reg": "LN17 WCV", "make": "Hyundai i20", "colour": "Blue", "value": 6900}, "start": "2026-05-15", "end": "2027-05-14", "territory": "UK", "addOns": ["courtesy_car", "protected_ncd"], "autoSettle": 1500},
+    "POL-84410": {"holder": "Oliver Grant", "cover": "comprehensive", "excess": {"compulsory": 250, "voluntary": 0}, "namedDrivers": ["Oliver Grant"], "vehicle": {"reg": "GN67 TXA", "make": "Skoda Octavia", "colour": "Silver", "value": 8600}, "start": "2025-11-02", "end": "2026-11-01", "territory": "UK", "addOns": [], "autoSettle": 1500},
+    "POL-91002": {"holder": "Ruth Adeyemi", "cover": "third_party_fire_theft", "excess": {"compulsory": 300, "voluntary": 0}, "namedDrivers": ["Ruth Adeyemi"], "vehicle": {"reg": "LC20 JUO", "make": "Ford Fiesta", "colour": "Blue", "value": 8100}, "start": "2026-04-09", "end": "2027-04-08", "territory": "UK", "addOns": [], "autoSettle": 1500}
+  }
+}

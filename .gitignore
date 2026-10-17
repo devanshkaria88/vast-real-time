@@ -16,3 +16,10 @@ agent-coordination/.taskboard.*
 # Python bytecode
 __pycache__/
 *.pyc
+
+# Poodle runtime state (per machine)
+server/data/state.json
+server/data/events.jsonl
+server/data/frames/
+server/data/jamcams-snapshot.json
+*.pt

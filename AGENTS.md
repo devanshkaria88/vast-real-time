@@ -7,7 +7,12 @@ shared taskboard, and every commit is pushed to GitHub.
 
 ## Project notes
 
-<!-- Fill in as the project takes shape: stack, how to run it, demo script. -->
+- Product: **Poodle**, a claims desk for road incidents (`docs/IDEA.md`). UI follows Linear's dark design system; audit and tokens in `docs/ui-audit.md`.
+- Stack: FastAPI backend in `server/` (port 8080) serving a no-build ES-module frontend in `poodle/`. Live London cameras from the TfL JamCams API.
+- Run: `uv run --with-requirements server/requirements.txt uvicorn server.app:app --port 8080`, then open http://localhost:8080. Add `ultralytics` to the environment for local YOLO scans.
+- Data: seed claims and policies in `server/data/`; demo clips built by `server/tools/build_media.py`; YOLO boxes by `server/tools/detect_stills.py`. Runtime state (`state.json`, `events.jsonl`, `frames/`) is gitignored.
+- Sponsor services switch on from env vars (`YOLO_URL`, `COSMOS3_REASON_URL`, `WANDB_API_KEY`, `TYPESAFE_API_KEY`, `VASTDB_ENDPOINT`); without them the app runs in replay mode and the sidebar says so.
+- Demo script: README "Demo in 90 seconds".
 
 ## Shared taskboard (mandatory)
 
