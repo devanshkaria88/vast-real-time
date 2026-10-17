@@ -1,15 +1,18 @@
+import { incidentDialog, incidentsView, mountIncidentDialog, mountIncidents } from "./incidents.js";
 import { api, esc, fmt, icon, POODLE_MARK, toast } from "./ui.js";
 import { camDialog, camerasView, claimView, FILTERS, listView, mountCamDialog, mountClaim, visibleClaims } from "./views.js";
 
 const state = {
   claims: [],
   health: null,
+  watch: null,
   cams: null,
   cache: new Map(),
   selected: {},
   from: "inbox",
   route: null,
   claimCtl: null,
+  viewCtl: null,
   camLimit: 48,
 };
 
@@ -40,6 +43,11 @@ function renderSidebar() {
   const r = state.route || {};
   const here = (name) => ((r.name === "list" && r.filter === name) || (r.name === "claim" && state.from === name) ? 'aria-current="page"' : "");
   const camsHere = r.name === "cameras" ? 'aria-current="page"' : "";
+  const libHere = r.name === "incidents" ? 'aria-current="page"' : "";
+  const w = state.watch || state.health?.watch;
+  const libCount = !w ? ""
+    : w.open ? `<span class="count hot" title="${w.open} open now, ${w.incidents} in the library">${w.open}</span>`
+    : `<span class="count" title="${w.incidents} in the library">${w.incidents}</span>`;
   const svc = state.health?.services || [];
   const live = state.health?.mode === "live";
   sidebar.innerHTML = `
@@ -52,6 +60,7 @@ function renderSidebar() {
       <a class="nav-item" href="#/fraud" ${here("fraud")}>${icon("flag", 15)}Fraud flags<span class="count${count("fraud") ? " hot" : ""}">${count("fraud")}</span></a>
       <div class="nav-label">Monitoring</div>
       <a class="nav-item" href="#/cameras" ${camsHere}>${icon("cctv", 15)}Live cameras<span class="live-dot" title="Live TfL feed"></span></a>
+      <a class="nav-item" href="#/incidents" ${libHere}>${icon("archive", 15)}Incident library${libCount}</a>
     </nav>
     <div class="services" aria-label="Services">
       <div class="services-h"><span>Services</span><span class="mode-chip${live ? " live" : ""}" title="${live ? "Every service is live" : "Services that are not connected run from recorded data"}">${live ? "Live" : "Replay mode"}</span></div>
@@ -69,6 +78,7 @@ function parseRoute() {
   const [head, id] = path.split("/");
   if (head === "claim" && id) return { name: "claim", id };
   if (head === "cameras") return { name: "cameras", params };
+  if (head === "incidents") return { name: "incidents", params };
   if (FILTERS[head]) return { name: "list", filter: head };
   return { name: "list", filter: "inbox" };
 }
@@ -76,6 +86,8 @@ function parseRoute() {
 async function route() {
   state.claimCtl?.destroy();
   state.claimCtl = null;
+  state.viewCtl?.destroy();
+  state.viewCtl = null;
   app.classList.remove("nav-open");
   const r = parseRoute();
   state.route = r;
@@ -83,6 +95,7 @@ async function route() {
   if (r.name === "list") return renderList(r.filter);
   if (r.name === "claim") return renderClaim(r.id);
   if (r.name === "cameras") return renderCameras(r.params);
+  if (r.name === "incidents") return renderIncidents(r.params);
 }
 
 function renderList(filter) {
@@ -183,6 +196,44 @@ async function renderCameras(params) {
   draw();
 }
 
+async function renderIncidents(params) {
+  main.innerHTML = `<header class="vh"><div class="vh-title">${icon("archive", 15)}Incident library</div></header>
+    <div class="view"><div class="lib-top"><div class="skeleton" style="height:150px"></div></div></div>`;
+  let data, watch;
+  try {
+    [data, watch] = await Promise.all([api.get("/api/incidents"), api.get("/api/watch")]);
+  } catch {
+    main.innerHTML = `<div class="empty"><b>The incident library did not load.</b><span>Check that the Poodle server is running, then reload.</span></div>`;
+    return;
+  }
+  if (state.route?.name !== "incidents") return;
+  state.watch = watch;
+  renderSidebar();
+  main.innerHTML = incidentsView(data, watch, params);
+  document.title = "Incident library · Poodle";
+  state.viewCtl = mountIncidents(main, data, watch, params, {
+    openIncident,
+    onWatch: (w) => {
+      state.watch = w;
+      renderSidebar();
+    },
+  });
+}
+
+async function openIncident(id) {
+  let inc;
+  try {
+    inc = await api.get(`/api/incidents/${encodeURIComponent(id)}`);
+  } catch {
+    toast(`Incident ${id} was not found`);
+    return;
+  }
+  openDialog(incidentDialog(inc), (root) => mountIncidentDialog(root, inc, {
+    openCam: (cam) => openCam(cam),
+    changed: () => state.viewCtl?.refresh?.(),
+  }));
+}
+
 // ---------------------------------------------------------------- actions
 
 async function act(id, action) {
@@ -245,7 +296,7 @@ function showKeys() {
   const rows = [
     ["Search or jump to", ["⌘", "K"]], ["Move down / up", ["J", "K"]], ["Open the selected claim", ["↵"]],
     ["Back to the list", ["Esc"]], ["Play or pause footage", ["Space"]], ["Show or hide detections", ["D"]],
-    ["Approve the recommendation", ["⌘", "↵"]], ["Go to inbox / cameras / all", ["G", "I · C · A"]], ["Show shortcuts", ["?"]],
+    ["Approve the recommendation", ["⌘", "↵"]], ["Go to inbox / cameras / all / library", ["G", "I · C · A · L"]], ["Show shortcuts", ["?"]],
   ];
   openDialog(`<div class="dialog" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts" style="width:min(460px,calc(100vw - 32px))">
     <div class="dialog-h">${icon("keyboard", 15)}Keyboard shortcuts<button class="icon-btn" data-close aria-label="Close (Esc)">${icon("x")}</button></div>
@@ -260,6 +311,7 @@ function commands(query) {
   const nav = [
     ["Inbox", "#/inbox", "inbox", "G I"], ["Ready to settle", "#/ready", "ready", "G R"], ["All claims", "#/all", "layers", "G A"],
     ["Fraud flags", "#/fraud", "flag", "G F"], ["Live cameras", "#/cameras", "cctv", "G C"],
+    ["Incident library", "#/incidents", "archive", "G L"],
   ];
   nav.forEach(([label, href, ic, hint]) => items.push({ group: "Go to", label, icon: ic, hint, run: () => (location.hash = href) }));
   state.claims.forEach((c) => items.push({ group: "Claims", label: `${c.id}  ${c.title}`, sub: `${c.area} ${c.label}`, icon: "doc", hint: c.label, run: () => (location.hash = `#/claim/${c.id}`) }));
@@ -354,7 +406,7 @@ document.addEventListener("keydown", (e) => {
   if (mod || e.altKey) return;
   if (Date.now() - gPending < 1200) {
     gPending = 0;
-    const go = { i: "#/inbox", c: "#/cameras", a: "#/all", r: "#/ready", f: "#/fraud" }[e.key.toLowerCase()];
+    const go = { i: "#/inbox", c: "#/cameras", a: "#/all", r: "#/ready", f: "#/fraud", l: "#/incidents" }[e.key.toLowerCase()];
     if (go) location.hash = go;
     return;
   }
@@ -402,6 +454,7 @@ async function boot() {
   route();
   setInterval(async () => {
     state.health = await api.get("/api/health").catch(() => state.health);
+    if (state.route?.name !== "incidents") state.watch = null;
     renderSidebar();
   }, 60000);
 }

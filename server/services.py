@@ -207,12 +207,22 @@ def jev_questions(policy: dict, wording: dict) -> dict:
     }
 
 
-async def jev_decide(client: httpx.AsyncClient, claim: dict, policy: dict, wording: dict) -> dict | None:
+def jev_target() -> tuple[str, str, str] | None:
+    """(base URL, key, model) for Jev, or None when no key is set."""
     key = env("TYPESAFE_API_KEY") or env("OPENROUTER_API_KEY")
     if not key:
         return None
-    base = env("JEV_BASE_URL") or ("https://api.typesafe.ai" if env("TYPESAFE_API_KEY") else "https://openrouter.ai/api")
-    model = env("JEV_MODEL") or ("jev-1.14.0" if env("TYPESAFE_API_KEY") else "typesafe/jev-1.14")
+    direct = bool(env("TYPESAFE_API_KEY"))
+    base = env("JEV_BASE_URL") or ("https://api.typesafe.ai" if direct else "https://openrouter.ai/api")
+    model = env("JEV_MODEL") or ("jev-1.14.0" if direct else "typesafe/jev-1.14")
+    return base, key, model
+
+
+async def jev_decide(client: httpx.AsyncClient, claim: dict, policy: dict, wording: dict) -> dict | None:
+    target = jev_target()
+    if not target:
+        return None
+    base, key, model = target
     state = {
         "facts": {"findings": [f["text"] for f in claim["findings"]], "statement": claim["statement"]["text"],
                   "driver": claim["driver"], "estimate": claim.get("estimate")},

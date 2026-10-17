@@ -17,12 +17,13 @@ from email.utils import parsedate_to_datetime
 
 import httpx
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from . import services, tfl
 from .engine import COVER_LABEL, DATA, WEB, answer, decide, load_json, money, sha256
+from .watch import LIBRARY, watcher
 
 CLAIMS: list[dict] = load_json("claims.json")
 POLICY_DATA = load_json("policies.json")
@@ -152,7 +153,9 @@ async def lifespan(_: FastAPI):
         print("TfL warm-up failed:", exc)
     for c in CLAIMS:
         custody(c)
+    watcher.start(http)
     yield
+    await watcher.stop()
     await http.aclose()
 
 
@@ -163,7 +166,9 @@ app = FastAPI(title="Poodle", lifespan=lifespan)
 async def health():
     await tfl.cameras(http)
     svc = services.services_status(tfl.status())
-    return {"ok": True, "mode": "live" if all(s["status"] == "live" for s in svc) else "replay", "services": svc}
+    w = watcher.status()
+    return {"ok": True, "mode": "live" if all(s["status"] == "live" for s in svc) else "replay", "services": svc,
+            "watch": {k: w[k] for k in ("state", "watching", "open", "incidents", "perMinute")}}
 
 
 @app.get("/api/claims")
@@ -344,4 +349,60 @@ async def pack_json(claim_id: str):
     return JSONResponse(full(find(claim_id)))
 
 
+# ---------------------------------------------------------------- background scanner and incident library
+
+@app.get("/api/watch")
+async def watch_status():
+    return watcher.status()
+
+
+class WatchControl(BaseModel):
+    action: str
+
+
+@app.post("/api/watch")
+async def watch_control(body: WatchControl):
+    if body.action not in ("pause", "resume"):
+        raise HTTPException(400, f"Unknown action {body.action}")
+    watcher.set_paused(body.action == "pause")
+    return watcher.status()
+
+
+@app.get("/api/watch/frames/{sha}")
+async def watch_frame(sha: str):
+    frame = watcher.recent_frame(sha)
+    if frame is None:
+        raise HTTPException(404, "That frame has left the recent buffer")
+    return Response(frame, media_type="image/jpeg", headers={"Cache-Control": "max-age=3600"})
+
+
+@app.get("/api/incidents")
+async def list_incidents():
+    return watcher.incidents()
+
+
+@app.get("/api/incidents/{incident_id}")
+async def get_incident(incident_id: str):
+    inc = watcher.library.incidents.get(incident_id)
+    if inc is None:
+        raise HTTPException(404, f"No incident {incident_id}")
+    return {**inc, "rules": watcher.rules()}
+
+
+class Review(BaseModel):
+    label: str | None = None
+    by: str = "You"
+
+
+@app.post("/api/incidents/{incident_id}/review")
+async def review_incident(incident_id: str, body: Review):
+    if body.label not in (None, "verified", "dismissed"):
+        raise HTTPException(400, f"Unknown label {body.label}")
+    inc = watcher.review(incident_id, body.label, body.by)
+    if inc is None:
+        raise HTTPException(404, f"No incident {incident_id}")
+    return inc
+
+
+app.mount("/library", StaticFiles(directory=LIBRARY), name="library")
 app.mount("/", StaticFiles(directory=WEB, html=True), name="web")

@@ -24,3 +24,9 @@ PD-0147 v1 (end frame only) moved the camera; v2 (erased start + still end) lock
 Locked-camera clips shipped for PD-0147 and PD-0226 (erased start frame + evidence still end, trimmed). PD-0219 rejected. ~$52.80 spent over 7 Ray2 takes
 
 **Next action:** Ask the builder whether to re-roll more claims (540p) or wire the two clips into the desk
+
+## 2026-10-17T13:57:28Z · cursor · completed
+
+Luma Ray2 provisioned in us-west-2 (agreement + private S3 bucket dk-bedrock-video-762233742141-us-west-2, outside Terraform); server/tools/luma_videos.py generates locked-camera CCTV clips; PD-0147 and PD-0226 in poodle/media/luma (inspected frame by frame, tool lint clean). Builder switched to real footage in poodle/media/raw, so no more takes. ~$52.80 spent.
+
+**Next action:** No further action; task completed.

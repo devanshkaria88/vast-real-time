@@ -10,7 +10,8 @@ shared taskboard, and every commit is pushed to GitHub.
 - Product: **Poodle**, a claims desk for road incidents (`docs/IDEA.md`). UI follows Linear's dark design system; audit and tokens in `docs/ui-audit.md`.
 - Stack: FastAPI backend in `server/` (port 8080) serving a no-build ES-module frontend in `poodle/`. Live London cameras from the TfL JamCams API.
 - Run: `uv run --with-requirements server/requirements.txt uvicorn server.app:app --port 8080`, then open http://localhost:8080. Add `ultralytics` to the environment for local YOLO scans.
-- Data: seed claims and policies in `server/data/`; demo clips built by `server/tools/build_media.py`; YOLO boxes by `server/tools/detect_stills.py`. Runtime state (`state.json`, `events.jsonl`, `frames/`) is gitignored.
+- Data: seed claims and policies in `server/data/`; demo clips built by `server/tools/build_media.py`; YOLO boxes by `server/tools/detect_stills.py`. Runtime state (`state.json`, `events.jsonl`, `frames/`, `library/`) is gitignored.
+- Background scanner: `server/watch.py` judges every new TfL JamCam still with Jev and keeps the incident library in `server/data/library/` (served at `/library/`, desk view `#/incidents`). Questions and thresholds sit at the top of that file. It runs whenever a Jev key is set (`POODLE_WATCH=off` stops it) and spends about $0.50 of Jev an hour on all of London.
 - Sponsor services switch on from env vars (`YOLO_URL`, `COSMOS3_REASON_URL`, `WANDB_API_KEY`, `TYPESAFE_API_KEY`, `VASTDB_ENDPOINT`); without them the app runs in replay mode and the sidebar says so.
 - Demo script: README "Demo in 90 seconds".
 

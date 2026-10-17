@@ -438,7 +438,7 @@ export function camerasView(cams, claims, opts) {
   }
   return `${header}<div class="view"><div class="cams-view">
     <div class="cams-toolbar"><div class="search-wrap">${icon("search", 14)}<input type="search" data-cam-search placeholder="Search ${available.length} cameras by road" value="${esc(opts.q || "")}" aria-label="Search cameras"></div>
-      <span class="note">Stills refresh every 1 to 3 minutes. Each camera has a 10 s clip. Images are shown uncropped.</span></div>
+      <span class="note">Stills refresh every 5 to 8 minutes. Each camera has a 10 s clip. Images are shown uncropped.</span></div>
     ${body}</div></div>`;
 }
 
@@ -472,7 +472,7 @@ export function camDialog(cam, claims, claimId) {
       </div>
       <div class="cam-side">
         <div class="kv"><span>Camera</span><b class="num">${esc(cam.id)}</b></div>
-        <div class="kv"><span>Refresh</span><b>Every 1 to 3 min</b></div>
+        <div class="kv"><span>Refresh</span><b>Every 5 to 8 min</b></div>
         <div class="kv"><span>Position</span><b class="num">${cam.lat.toFixed(4)}, ${cam.lon.toFixed(4)}</b></div>
         ${claim ? `<div class="kv"><span>From ${esc(claim.id)}</span><b>${fmt.dist(distanceM(claim.lat, claim.lon, cam.lat, cam.lon))}</b></div>` : ""}
         <button class="btn" data-scan>${icon("scan", 14)}Scan the latest still</button>

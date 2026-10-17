@@ -21,6 +21,7 @@ __pycache__/
 server/data/state.json
 server/data/events.jsonl
 server/data/frames/
+server/data/library/
 server/data/jamcams-snapshot.json
 server/data/luma/
 *.pt

@@ -1,7 +1,7 @@
 """TfL JamCams: the live London traffic camera feed.
 
 List: https://api.tfl.gov.uk/Place/Type/JamCam (CORS open, ~890 cameras).
-Each camera has a JPEG still (refreshed every 1-3 min) and a ~10 s MP4 clip on S3.
+Each camera has a JPEG still (refreshed every 5-8 min) and a ~10 s MP4 clip on S3.
 Licence: show images uncropped and credit "Powered by TfL Open Data".
 """
 
