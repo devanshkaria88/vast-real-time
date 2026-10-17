@@ -7,7 +7,19 @@ shared taskboard, and every commit is pushed to GitHub.
 
 ## Project notes
 
-<!-- Fill in as the project takes shape: stack, how to run it, demo script. -->
+There is no application server in this repository yet. The runnable tool is the
+shared taskboard. It needs bash, `sed`, `find`, and git, and nothing else.
+
+```bash
+./scripts/agent-taskboard.sh context --agent <your-name>
+```
+
+`./scripts/agent-taskboard.sh setup` points `core.hooksPath` at `.githooks` so
+every commit is pushed. Cloud Agents already set `core.hooksPath` to Cursor's
+hook dispatcher. Git then ignores `.git/hooks`, so do not run `setup` in a
+Cloud Agent: it would drop Cursor's `pre-commit` and `commit-msg` hooks. The
+Cloud Agent `start` script installs a `post-commit` forwarder in that
+dispatcher directory instead, and leaves `core.hooksPath` alone.
 
 ## Shared taskboard (mandatory)
 
