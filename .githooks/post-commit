@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Push every commit to origin in the background, so GitHub always mirrors the
+# local branch and every agent's work is visible to the team.
+#
+# One pusher runs at a time. A commit made while a push is in flight leaves a
+# pending marker, and the running pusher pushes again before it exits.
+# Disable in this clone with: git config taskboard.autopush false
+[ "$(git config --bool taskboard.autopush 2>/dev/null)" = "false" ] && exit 0
+git remote get-url origin >/dev/null 2>&1 || exit 0
+branch=$(git symbolic-ref --short -q HEAD) || exit 0   # detached HEAD: nothing to push
+
+gitdir=$(git rev-parse --absolute-git-dir)
+pending="$gitdir/autopush.pending"
+lock="$gitdir/autopush.lock"
+state="$gitdir/autopush.status"
+
+touch "$pending"
+(
+  export GIT_TERMINAL_PROMPT=0
+  # A pusher killed mid-push (sleep, crash) must not block pushes forever.
+  [ -n "$(find "$lock" -maxdepth 0 -mmin +10 2>/dev/null)" ] && rmdir "$lock" 2>/dev/null
+  while [ -e "$pending" ]; do
+    mkdir "$lock" 2>/dev/null || exit 0   # the running pusher will pick up this commit
+    while [ -e "$pending" ]; do
+      rm -f "$pending"
+      if out=$(git push -u origin "$branch" 2>&1); then
+        printf 'ok %s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$(git rev-parse --short "$branch")" > "$state"
+      else
+        reason=$(printf '%s\n' "$out" | grep -E '\[rejected\]|^error:|^fatal:' | head -n 1 | sed 's/^[[:space:]!]*//')
+        printf 'failed %s: %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${reason:-$(printf '%s' "$out" | tail -n 1)}" > "$state"
+        break   # the next commit retries
+      fi
+    done
+    rmdir "$lock"
+  done
+) </dev/null >/dev/null 2>&1 &
+exit 0

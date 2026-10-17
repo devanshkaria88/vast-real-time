@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+.next/
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+
+# Taskboard runtime state (per machine, never committed)
+agent-coordination/active/
+agent-coordination/.write-lock/
+agent-coordination/.taskboard.*
