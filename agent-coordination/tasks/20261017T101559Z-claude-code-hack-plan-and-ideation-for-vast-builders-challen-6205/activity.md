@@ -54,3 +54,9 @@ jev-decisions skill added and validated; docs/hack-plan.md written with interim 
 Takeover from claude-code. New claude-code session on another machine continuing the hack plan. Previous checkpoint by claude-code: jev-decisions skill added and validated; docs/hack-plan.md written with interim pick RackWitness; idea panel rerun in progress
 
 **Next action:** Update docs/hack-plan.md with the panel ranking and verdicts when the workflow completes
+
+## 2026-10-17T11:15:23Z · claude-code · in-progress
+
+Added docs/IDEA.md: Claim Witness, video agent for incident and insurance claims (features, agents, sponsor stack, data, demo)
+
+**Next action:** Team picks between Claim Witness and RackWitness in docs/hack-plan.md
