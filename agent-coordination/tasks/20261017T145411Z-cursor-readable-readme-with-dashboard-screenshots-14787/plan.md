@@ -54,3 +54,10 @@ tells (humanizer skill), and fresh screenshots of the current dashboard where th
 - 2026-10-17T14:54:11Z — Task created. Fill this plan before modifying scoped files.
 - 2026-10-17T14:58Z — Claim screenshots come from a seeded instance because live Jev
   currently refers every claim; the README says the walkthrough uses recorded answers.
+- 2026-10-17T14:59Z — Out-of-scope one-line fix in `poodle/app.css`: the rule
+  `.overlay g.det:not(.at)` (from 68c522e) hid the YOLO boxes on live camera scans; it is
+  now scoped to `#incident-player`. Needed for the live-scan screenshot and demo step 5.
+- 2026-10-17T15:06Z — Tour images cropped or clipped to the panel or dialog so they show
+  near 1:1 in GitHub's ~890 px column; the hero keeps the full app.
+- 2026-10-17T15:06Z — Old demo step pointed at the "give-way line" finding for a YOLO box;
+  that finding has none. README now uses "Blue car broadside across the policyholder's lane".
