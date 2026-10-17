@@ -6,7 +6,7 @@
           {
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/taskboard-hook.sh claude-code context",
-            "timeout": 10
+            "timeout": 40
           }
         ]
       }

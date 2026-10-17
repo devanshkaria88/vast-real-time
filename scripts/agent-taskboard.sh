@@ -459,11 +459,24 @@ EOF
 }
 
 git_notes() {
-  local gitdir state
+  local gitdir state now mtime
   gitdir=$(git -C "$ROOT_DIR" rev-parse --absolute-git-dir 2>/dev/null) || return 0
   git -C "$ROOT_DIR" remote get-url origin >/dev/null 2>&1 || return 0
   if [[ -f "$ROOT_DIR/.githooks/post-commit" && "$(git -C "$ROOT_DIR" config core.hooksPath 2>/dev/null)" != ".githooks" ]]; then
     echo "! Push-on-commit is not enabled in this clone. Run: $SELF setup"
+  fi
+  if [[ -f "$gitdir/autopull.status" ]]; then
+    state=$(cat "$gitdir/autopull.status")
+    if [[ "$state" == failed* ]]; then
+      echo "! The last automatic pull failed (${state#failed })."
+      echo "  Fix the checkout, then retry. Disable turn-start pulls with: git config taskboard.autopull false"
+    elif [[ "$state" == updated* ]]; then
+      now=$(date +%s)
+      mtime=$(stat -f %m "$gitdir/autopull.status" 2>/dev/null || stat -c %Y "$gitdir/autopull.status" 2>/dev/null || echo 0)
+      if (( now - mtime < 600 )); then
+        echo "Turn-start pull brought in new commits (${state#updated })."
+      fi
+    fi
   fi
   [[ -f "$gitdir/autopush.status" ]] || return 0
   state=$(cat "$gitdir/autopush.status")

@@ -74,10 +74,23 @@ Taskboard checkpoint: <what changed, key result, or blocker> | Next: <single nex
 Never overwrite another task's plan or rewrite its activity log. Taking over
 extends the same record; that is expected whenever another agent stops.
 
-## Git: every commit is pushed
+## Git: pull on each turn, push on each commit
 
+- At the start of every agent turn, the checkout pulls from `origin` with
+  `git pull --rebase --autostash`, so someone else's push is already local
+  before the turn reads or edits files. Cursor does this from
+  `.cursor/hooks.json` (`beforeSubmitPrompt`). Claude Code and Codex do it at
+  the start of the UserPromptSubmit hook, then print the taskboard.
+- Uncommitted work is stashed for that pull and put back afterwards. If the
+  pull conflicts, the rebase is aborted and the taskboard context says so.
+  The checkout is not left mid-rebase. A pull is also skipped while a push is
+  still in flight, while a merge or rebase is already open, or on a detached
+  HEAD.
+- Disable the turn-start pull in this clone with
+  `git config taskboard.autopull false`.
 - `origin` is the GitHub repository. `.githooks/post-commit` pushes each commit
-  in the background, so the remote always mirrors your work.
+  in the background, so the remote always mirrors your work. That push is
+  unchanged.
 - Claude Code, Codex and Cursor commit automatically at the end of each turn.
   Any other agent commits after each meaningful step, with a message that
   starts with its agent name: `git commit -m "<your-name>: <what changed>"`.
@@ -88,8 +101,9 @@ extends the same record; that is expected whenever another agent stops.
 - After a fresh clone, run `./scripts/agent-taskboard.sh setup` once to enable
   push-on-commit.
 - Per-clone switches: `git config taskboard.autocommit false`,
-  `git config taskboard.autopush false`, and `git config taskboard.enforce false`
-  (stops hooks from blocking edits when no task is registered).
+  `git config taskboard.autopull false`, `git config taskboard.autopush false`,
+  and `git config taskboard.enforce false` (stops hooks from blocking edits
+  when no task is registered).
 
 ## Project skills
 

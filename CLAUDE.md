@@ -4,8 +4,9 @@
 
 - Your agent name on the taskboard is `claude-code`.
 - `.claude/settings.json` wires three hooks to `scripts/taskboard-hook.sh`:
-  - **UserPromptSubmit** adds the taskboard context (your active task,
-    unfinished tasks, recent activity) to every prompt.
+  - **UserPromptSubmit** pulls `origin` (`git pull --rebase --autostash`), then
+    adds the taskboard context (your active task, unfinished tasks, recent
+    activity) to every prompt. Push-on-commit is unchanged.
   - **PreToolUse** blocks `Edit`/`Write` inside this repo until you have an
     active task. When it fires, run `start` or `take-over`, then retry.
   - **Stop** records your final `Taskboard checkpoint:` line on your active task

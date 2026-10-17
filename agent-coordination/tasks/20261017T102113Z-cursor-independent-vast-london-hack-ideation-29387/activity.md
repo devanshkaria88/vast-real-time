@@ -42,3 +42,9 @@ Added a concrete use-case for Lone Job and Return Stop in docs/cursor-hack-ideas
 Added a concrete use-case for Lone Job and Return Stop
 
 **Next action:** Wait for the builder to choose Lone Job or Return Stop.
+
+## 2026-10-17T11:58:57Z · cursor · ready-for-handoff
+
+Ideas stay in docs/cursor-hack-ideas.md. Builder named the product Poodle and asked for its dashboard.
+
+**Next action:** Leave Lone Job and Return Stop as written unless the builder picks one.

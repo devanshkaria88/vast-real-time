@@ -1,12 +1,14 @@
-# Claim Witness — Video Agent for Incident & Insurance Claims
+# Poodle — Video Agent for Incident & Insurance Claims
 
 > Real-Time Video Agents Hack · VAST London · 17 Oct 2026
 > Theme fit: an agent that **searches footage, answers questions, spots events, and takes action**.
 > Judging criteria (VAST blog): **creativity, technical implementation, real-world impact**.
 
+Poodle is the name of this idea. The claims desk is [`poodle/index.html`](../poodle/index.html). A small apricot poodle sits on top of that desk and moves with the open claim: steady while you read, brighter when a decision is ready for a person to confirm. The desk writes that same mood in words, so the motion is not the only signal.
+
 ## One-liner
 
-When a road incident happens, Claim Witness takes every piece of footage (dashcam, CCTV, phone clips), the GPS track, the location context and the claimant's insurance policy. It reconstructs what happened on one synced timeline, answers an adjuster's questions with timestamped clip proof, checks the events against the road rules, flags contradictions and fraud signals, **decides whether the claim is covered and which benefits apply** (accept, partial, reject or refer to a human), and exports a tamper-evident evidence pack fit to share with lawyers or a court.
+When a road incident happens, Poodle takes every piece of footage (dashcam, CCTV, phone clips), the GPS track, the location context and the claimant's insurance policy. It reconstructs what happened on one synced timeline, answers an adjuster's questions with timestamped clip proof, checks the events against the road rules, flags contradictions and fraud signals, **decides whether the claim is covered and which benefits apply** (accept, partial, reject or refer to a human), and exports a tamper-evident evidence pack fit to share with lawyers or a court.
 
 ## Problem
 
@@ -29,7 +31,7 @@ When a road incident happens, Claim Witness takes every piece of footage (dashca
 
 ## Positioning
 
-Claim Witness **assists** the human decision-maker. It produces an evidence-backed assessment of contributing factors and a coverage recommendation, each with confidence scores. Only simple, low-value, high-confidence acceptances can be settled automatically; **every rejection, partial decision and uncertain case goes to a human handler**. Every claim the system makes links to a clip, a frame, a road rule or a policy clause.
+Poodle **assists** the human decision-maker. It produces an evidence-backed assessment of contributing factors and a coverage recommendation, each with confidence scores. Only simple, low-value, high-confidence acceptances can be settled automatically; **every rejection, partial decision and uncertain case goes to a human handler**. Every claim the system makes links to a clip, a frame, a road rule or a policy clause.
 
 ---
 
@@ -227,7 +229,7 @@ Thresholds are examples, calibrated on labelled claims. Higher thresholds guard 
 ### What the customer sees
 
 ```
-Decision: ACCEPT – PARTIAL                                   ref CW-0147
+Decision: ACCEPT – PARTIAL                                   ref PD-0147
 Cover: Comprehensive · Excess £350
 Incident: collision at signal-controlled junction, 17 Oct 2026 09:42
 Fault: other driver entered on red (CCTV-1 00:13.0) — you are not at fault
@@ -314,7 +316,7 @@ Jev is **not** a hackathon sponsor tool. It sits alongside the sponsor stack, wh
 
 ### Sponsor stack map
 
-| Tool | Role in Claim Witness |
+| Tool | Role in Poodle |
 |------|-----------------------|
 | **VAST AI OS / VastDB** | One store for raw video, segment embeddings, metadata, incident records, policy clauses and past claims. Powers Q&A retrieval, cross-claim search and consistency audits. |
 | **NVIDIA VSS Blueprint + Cosmos** | Cosmos3-Reason for segment reasoning and Q&A; Cosmos Embed1 for searchable embeddings; VSS search and ask APIs. |
@@ -334,7 +336,7 @@ Jev is **not** a hackathon sponsor tool. It sits alongside the sponsor stack, wh
 ## Data sources
 
 ### Build-day video
-Per the event's lab docs, the shared corpus includes **I-24 highway footage, Toronto dashcam, a neighbourhood camera and San Francisco streets** (plus warehouse and indoor clips). Traffic and dashcam clips fit Claim Witness directly. Internet video is banned on build day; own local recordings are allowed by the upload skill (confirm with the VAST organisers).
+Per the event's lab docs, the shared corpus includes **I-24 highway footage, Toronto dashcam, a neighbourhood camera and San Francisco streets** (plus warehouse and indoor clips). Traffic and dashcam clips fit Poodle directly. Internet video is banned on build day; own local recordings are allowed by the upload skill (confirm with the VAST organisers).
 
 | Source | What | Use |
 |--------|------|-----|
@@ -377,6 +379,8 @@ No public dataset was found with several camera angles of the same real crash, w
 ---
 
 ## Demo story (90 seconds)
+
+Open `poodle/index.html` first. The poodle is already sitting on the desk, and PD-0147 is the open claim.
 
 1. The claimant states: "I had a green light; the other driver hit me." Their policy: comprehensive, £350 excess, legal-expenses add-on, no courtesy-car add-on.
 2. The adjuster uploads three clips (dashcam, CCTV, bystander phone) and the GPS track. The agent hashes them and syncs them onto one timeline.

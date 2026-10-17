@@ -8,8 +8,9 @@ stops, read its plan and activity log, then take over the **same task**.
 
 | Status | Task | Created by | Current executor | Last agent | Scope | Last activity | Next action | Plan | Log |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| in-progress | Poodle dashboard and turn-start pull | cursor | cursor | cursor | `scripts/taskboard-hook.sh,.cursor/hooks.json,.claude/settings.json,.codex/hooks.json,AGENTS.md,CLAUDE.md,README.md,agent-coordination/README.md,docs/IDEA.md,poodle` | 2026-10-17T12:30:17Z | Open the desk and walk the four sample claims. | [plan](tasks/20261017T115900Z-cursor-poodle-dashboard-and-turn-start-pull-22752/plan.md) | [activity](tasks/20261017T115900Z-cursor-poodle-dashboard-and-turn-start-pull-22752/activity.md) |
+| ready-for-handoff | Independent VAST London hack ideation | cursor | unassigned | cursor | `docs/cursor-hack-ideas.md` | 2026-10-17T11:58:57Z | Leave Lone Job and Return Stop as written unless the builder picks one. | [plan](tasks/20261017T102113Z-cursor-independent-vast-london-hack-ideation-29387/plan.md) | [activity](tasks/20261017T102113Z-cursor-independent-vast-london-hack-ideation-29387/activity.md) |
 | in-progress | Hack plan and ideation for VAST Builders Challenge London | claude-code | claude-code | claude-code | `docs/ agent-coordination/` | 2026-10-17T11:15:23Z | Team picks between Claim Witness and RackWitness in docs/hack-plan.md | [plan](tasks/20261017T101559Z-claude-code-hack-plan-and-ideation-for-vast-builders-challen-6205/plan.md) | [activity](tasks/20261017T101559Z-claude-code-hack-plan-and-ideation-for-vast-builders-challen-6205/activity.md) |
-| in-progress | Independent VAST London hack ideation | cursor | cursor | cursor | `docs/cursor-hack-ideas.md` | 2026-10-17T10:42:47Z | Wait for the builder to choose Lone Job or Return Stop. | [plan](tasks/20261017T102113Z-cursor-independent-vast-london-hack-ideation-29387/plan.md) | [activity](tasks/20261017T102113Z-cursor-independent-vast-london-hack-ideation-29387/activity.md) |
 
 ## Failover rule
 

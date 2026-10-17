@@ -6,7 +6,7 @@
           {
             "type": "command",
             "command": "\"$(git rev-parse --show-toplevel)\"/scripts/taskboard-hook.sh codex context",
-            "timeout": 10,
+            "timeout": 40,
             "statusMessage": "Reading the shared taskboard"
           }
         ]

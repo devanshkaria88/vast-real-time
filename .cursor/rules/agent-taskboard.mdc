@@ -22,6 +22,10 @@ Before inspecting or modifying files for a request:
 4. Checkpoint at milestones (`checkpoint ... --summary ... --next ...`), and
    `complete` only after validation.
 
+A `beforeSubmitPrompt` hook pulls `origin` at the start of every turn
+(`git pull --rebase --autostash`). Push-on-commit is unchanged. If the
+taskboard context says that pull failed, resolve it before editing.
+
 The `afterAgentResponse` hook records a checkpoint on your active task and
 commits the turn (the commit is pushed automatically). Make the record useful
 by ending every response with exactly one line:

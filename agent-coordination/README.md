@@ -35,12 +35,13 @@ find or create task → plan → checkpoint work → hand off or take over → v
 
 | Agent | Instructions | Hooks |
 | --- | --- | --- |
-| Claude Code | `CLAUDE.md` (imports `AGENTS.md`) | `.claude/settings.json`: context on prompt, edit guard, checkpoint + commit on stop |
-| Codex | `AGENTS.md` | `.codex/hooks.json`: same three hooks (loads once the project is trusted and the hooks are approved) |
-| Cursor | `.cursor/rules/agent-taskboard.mdc`, `AGENTS.md` | `.cursor/hooks.json`: checkpoint + commit after each response |
+| Claude Code | `CLAUDE.md` (imports `AGENTS.md`) | `.claude/settings.json`: pull then context on prompt, edit guard, checkpoint + commit on stop |
+| Codex | `AGENTS.md` | `.codex/hooks.json`: same hooks (loads once the project is trusted and the hooks are approved) |
+| Cursor | `.cursor/rules/agent-taskboard.mdc`, `AGENTS.md` | `.cursor/hooks.json`: pull at the start of each turn, checkpoint + commit after each response |
 | Any other agent | `AGENTS.md` | none; it calls the helper and commits explicitly |
 
 All hooks go through `scripts/taskboard-hook.sh`. A hook only writes to a task
 while its agent is the task's current executor, so a stale hook cannot
-overwrite work another agent has taken over. Every commit is pushed by
+overwrite work another agent has taken over. Every turn starts with
+`git pull --rebase --autostash`. Every commit is pushed by
 `.githooks/post-commit`.

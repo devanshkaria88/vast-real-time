@@ -11,7 +11,8 @@ share one taskboard: [`agent-coordination/taskboard.md`](agent-coordination/task
 Each agent registers what it is building, checkpoints as it goes, and can take
 over a task another agent left unfinished.
 
-Every commit is pushed to GitHub automatically. After cloning, enable that once:
+Every turn starts by pulling from GitHub, in case someone else pushed.
+Every commit is still pushed automatically. After cloning, enable that once:
 
 ```bash
 ./scripts/agent-taskboard.sh setup

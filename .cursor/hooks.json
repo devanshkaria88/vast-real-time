@@ -1,6 +1,12 @@
 {
   "version": 1,
   "hooks": {
+    "beforeSubmitPrompt": [
+      {
+        "command": ".cursor/hooks/pull-on-turn.sh",
+        "timeout": 30
+      }
+    ],
     "afterAgentResponse": [
       {
         "command": ".cursor/hooks/taskboard-turn.sh"
