@@ -8,7 +8,7 @@ stops, read its plan and activity log, then take over the **same task**.
 
 | Status | Task | Created by | Current executor | Last agent | Scope | Last activity | Next action | Plan | Log |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| — | No tasks registered yet | — | — | — | — | — | — | — | — |
+| in-progress | Hack plan and ideation for VAST Builders Challenge London | claude-code | claude-code | claude-code | `docs/ agent-coordination/` | 2026-10-17T10:18:20Z | Write docs/hack-plan.md from the workflow result | [plan](tasks/20261017T101559Z-claude-code-hack-plan-and-ideation-for-vast-builders-challen-6205/plan.md) | [activity](tasks/20261017T101559Z-claude-code-hack-plan-and-ideation-for-vast-builders-challen-6205/activity.md) |
 
 ## Failover rule
 
