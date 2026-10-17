@@ -1,348 +1,1152 @@
 [
-  {
-    "id": "PD-0147",
-    "title": "Collision at signal junction, other driver on red",
-    "place": "Romford Rd / Tennyson Rd",
-    "area": "Forest Gate, E7",
-    "lat": 51.5423, "lon": 0.0058,
-    "incidentAt": "2026-10-16T17:32:18",
-    "reportedAt": "2026-10-16T18:05:00",
-    "channel": "App",
-    "policyId": "POL-88213",
-    "driver": "Amara Okafor",
-    "vehicleReg": "LK19 XYT",
-    "thirdParty": {"vehicle": "Red Seat Leon", "insurer": "Hartwell Mutual"},
-    "estimate": 2140,
-    "assignee": "Priya Shah",
-    "footage": {"still": "8CCDa", "camera": "CAM 12", "source": "Junction CCTV, LB Newham", "clip": "media/incidents/PD-0147.mp4", "poster": "media/incidents/PD-0147.jpg", "thumb": "media/incidents/PD-0147-thumb.jpg", "startsAt": "2026-10-16T17:32:18", "duration": 12},
-    "findings": [
-      {"id": "f1", "t": 0.0, "kind": "vehicle", "text": "Claimant's blue hatchback is in the junction box, front-end damage.", "det": [0], "conf": 0.94, "source": "YOLO11s"},
-      {"id": "f2", "t": 0.0, "kind": "vehicle", "text": "Red hatchback from the main road, front-end damage, nose into the claimant's front.", "det": [1], "conf": 0.93, "source": "YOLO11s"},
-      {"id": "f3", "t": 0.0, "kind": "signal", "text": "Both main-road signal heads in view show red.", "det": [3, 4], "conf": 0.96, "source": "YOLO11s + colour check"},
-      {"id": "f4", "t": 0.0, "kind": "impact", "text": "Debris field centred between the two front ends, inside the junction: point of impact.", "det": [0, 1], "conf": 0.88, "source": "Cosmos (replay)"},
-      {"id": "f5", "t": 0.0, "kind": "road", "text": "Dry road, daylight, signal-controlled crossroads.", "det": [], "conf": 0.9, "source": "Cosmos (replay)"}
-    ],
-    "statement": {
-      "by": "Amara Okafor (policyholder)",
-      "text": "I had a green light coming out of Tennyson Road. The red car came through on red and hit me.",
-      "claims": [
-        {"text": "The red car came through on red.", "verdict": "supported", "finding": "f3", "conf": 0.91},
-        {"text": "The collision happened inside the junction.", "verdict": "supported", "finding": "f4", "conf": 0.88},
-        {"text": "I had a green light.", "verdict": "unverifiable", "finding": null, "conf": 0.5, "note": "The side-road signal head is out of frame."}
-      ]
-    },
-    "otherStatement": {"by": "Third-party driver", "text": "My light was green."},
-    "rules": ["HC175"],
-    "jev": {
-      "peril": {"choice": "collision_with_vehicle", "confidence": 0.97},
-      "section_covers_peril": {"noul": 0.97},
-      "exclusion": {"choice": "none", "confidence": 0.94},
-      "fault_band": {"level": "not_at_fault", "confidence": 0.88},
-      "benefit_courtesy_car": {"noul": 0.92},
-      "benefit_legal_expenses": {"noul": 0.93},
-      "severity": {"level": "repairable", "confidence": 0.81},
-      "evidence_sufficient": {"noul": 0.92},
-      "fraud_risk": {"level": "low", "confidence": 0.87}
-    }
+ {
+  "id": "PD-0147",
+  "title": "Car pulled out of a give-way junction into the policyholder",
+  "place": "Romford Rd / Tennyson Rd",
+  "area": "Forest Gate, E7",
+  "lat": 51.5423,
+  "lon": 0.0058,
+  "incidentAt": "2026-10-16T17:32:18",
+  "reportedAt": "2026-10-16T18:05:00",
+  "channel": "App",
+  "policyId": "POL-88213",
+  "driver": "Amara Okafor",
+  "vehicleReg": "LK19 XYT",
+  "thirdParty": {
+   "vehicle": "Blue Vauxhall Mokka",
+   "insurer": "Hartwell Mutual"
   },
-  {
-    "id": "PD-0204",
-    "title": "Entered roundabout into circulating car",
-    "place": "Hogarth Roundabout",
-    "area": "Chiswick, W4",
-    "lat": 51.4875, "lon": -0.2515,
-    "incidentAt": "2026-10-15T16:32:18",
-    "reportedAt": "2026-10-15T17:10:00",
-    "channel": "Phone",
-    "policyId": "POL-90417",
-    "driver": "Daniel Moore",
-    "vehicleReg": "YD68 KFM",
-    "thirdParty": {"vehicle": "White Peugeot 208", "insurer": "Ashby & Lane"},
-    "estimate": 3380,
-    "assignee": "Tom Reid",
-    "footage": {"still": "0Tq6p", "camera": "CAM 04", "source": "Roundabout CCTV, LB Hounslow", "clip": "media/incidents/PD-0204.mp4", "poster": "media/incidents/PD-0204.jpg", "thumb": "media/incidents/PD-0204-thumb.jpg", "startsAt": "2026-10-15T16:32:18", "duration": 12},
-    "findings": [
-      {"id": "f1", "t": 0.0, "kind": "vehicle", "text": "Claimant's red hatchback stopped across the entry lane, front-end damage.", "det": [0], "conf": 0.43, "source": "YOLO11s"},
-      {"id": "f2", "t": 0.0, "kind": "vehicle", "text": "White hatchback on the circulating carriageway, damage to its front nearside.", "det": [2], "conf": 0.33, "source": "YOLO11s"},
-      {"id": "f3", "t": 0.0, "kind": "impact", "text": "Contact point is on the circulating lane, past the give-way line of the claimant's approach.", "det": [1], "conf": 0.86, "source": "Cosmos (replay)"},
-      {"id": "f4", "t": 0.0, "kind": "road", "text": "Give-way markings at every approach. Dry, daylight.", "det": [], "conf": 0.9, "source": "Cosmos (replay)"}
-    ],
-    "statement": {
-      "by": "Daniel Moore (policyholder)",
-      "text": "They came round fast. I was already pulling on and could not stop.",
-      "claims": [
-        {"text": "I was already on the roundabout.", "verdict": "contradicted", "finding": "f3", "conf": 0.86},
-        {"text": "The other car was going fast.", "verdict": "unverifiable", "finding": null, "conf": 0.5, "note": "A single frame cannot show speed."}
-      ]
-    },
-    "rules": ["HC185"],
-    "jev": {
-      "peril": {"choice": "collision_with_vehicle", "confidence": 0.95},
-      "section_covers_peril": {"noul": 0.03},
-      "exclusion": {"choice": "none", "confidence": 0.9},
-      "fault_band": {"level": "mostly_at_fault", "confidence": 0.84},
-      "benefit_courtesy_car": {"noul": 0.1},
-      "benefit_legal_expenses": {"noul": 0.1},
-      "severity": {"level": "repairable", "confidence": 0.77},
-      "evidence_sufficient": {"noul": 0.9},
-      "fraud_risk": {"level": "low", "confidence": 0.84}
-    }
+  "estimate": 6850,
+  "assignee": "Priya Shah",
+  "footage": {
+   "raw": "media/raw/accident_002.mp4",
+   "camera": "Front dashcam",
+   "source": "Policyholder's dashcam, uploaded in the app",
+   "credit": "Real dashcam footage from UK Dash Cameras, submitted by David M",
+   "clip": "media/incidents/PD-0147.mp4",
+   "poster": "media/incidents/PD-0147.jpg",
+   "thumb": "media/incidents/PD-0147-thumb.jpg",
+   "posterAt": 1.9,
+   "startsAt": "2026-10-16T17:32:16",
+   "duration": 6.21
   },
-  {
-    "id": "PD-0188",
-    "title": "Rear-end shunt after a lane cut-in",
-    "place": "A13 East India Dock Rd / Cotton St",
-    "area": "Poplar, E14",
-    "lat": 51.5116, "lon": -0.0104,
-    "incidentAt": "2026-10-16T14:32:18",
-    "reportedAt": "2026-10-16T15:01:00",
-    "channel": "Phone",
-    "policyId": "POL-77120",
-    "driver": "Marcus Bell",
-    "vehicleReg": "LR21 HHA",
-    "thirdParty": {"vehicle": "White Toyota Yaris", "insurer": "Undisclosed"},
-    "estimate": 1760,
-    "assignee": "Priya Shah",
-    "footage": {"still": "uoCkm", "camera": "A13-07", "source": "Highway CCTV, TfL network", "clip": "media/incidents/PD-0188.mp4", "poster": "media/incidents/PD-0188.jpg", "thumb": "media/incidents/PD-0188-thumb.jpg", "startsAt": "2026-10-16T14:32:18", "duration": 12},
-    "findings": [
-      {"id": "f1", "t": 0.0, "kind": "vehicle", "text": "Claimant's black SUV in lane 1, front-end contact with the white car.", "det": [6], "conf": 0.78, "source": "YOLO11s"},
-      {"id": "f2", "t": 0.0, "kind": "vehicle", "text": "White hatchback sits across the lane line, rear-quarter damage.", "det": [3], "conf": 0.83, "source": "YOLO11s"},
-      {"id": "f3", "t": 0.0, "kind": "motion", "text": "Lane ahead of the white car is clear for about 60 m. No hazard to explain a hard stop.", "det": [2, 4], "conf": 0.74, "source": "Cosmos (replay)"},
-      {"id": "f4", "t": 0.0, "kind": "impact", "text": "Angled contact: the white car was moving across from lane 2 when it was hit.", "det": [3, 6], "conf": 0.69, "source": "Cosmos (replay)"},
-      {"id": "f5", "t": 0.0, "kind": "road", "text": "Dual carriageway, free-flowing traffic, dry.", "det": [], "conf": 0.9, "source": "Cosmos (replay)"}
+  "findings": [
+   {
+    "id": "f1",
+    "t": 0.5,
+    "kind": "road",
+    "text": "Straight single-carriageway road with a give-way side road on the left. Dry, early daylight.",
+    "det": [],
+    "conf": 0.9,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f2",
+    "t": 1.1,
+    "kind": "vehicle",
+    "text": "Blue compact SUV, likely a Vauxhall Mokka, appears in the side road on the left.",
+    "det": [],
+    "conf": 0.86,
+    "source": "YOLO11s"
+   },
+   {
+    "id": "f3",
+    "t": 1.8,
+    "kind": "road",
+    "text": "The blue car crosses the give-way line into the main road without stopping.",
+    "det": [],
+    "conf": 0.82,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f4",
+    "t": 1.9,
+    "kind": "vehicle",
+    "text": "Blue car broadside across the policyholder's lane about 0.2 s before contact.",
+    "det": [
+     2
     ],
-    "statement": {
-      "by": "Marcus Bell (policyholder)",
-      "text": "The white car cut in from the outside lane and slammed on. I went into the back of it.",
-      "claims": [
-        {"text": "The white car cut in from lane 2.", "verdict": "supported", "finding": "f4", "conf": 0.69},
-        {"text": "It braked for no reason.", "verdict": "supported", "finding": "f3", "conf": 0.74},
-        {"text": "I could not avoid it.", "verdict": "unverifiable", "finding": null, "conf": 0.5, "note": "Following distance before the cut-in is not in the clip."}
-      ]
+    "conf": 0.88,
+    "source": "YOLO11s"
+   },
+   {
+    "id": "f5",
+    "t": 2.13,
+    "kind": "impact",
+    "text": "Impact: the policyholder's front hits the blue car's driver's side front quarter.",
+    "det": [
+     5,
+     6
+    ],
+    "conf": 0.9,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f6",
+    "t": 4.5,
+    "kind": "impact",
+    "text": "Photo after the crash: the policyholder's nearside front is destroyed and the airbags are deployed.",
+    "det": [],
+    "conf": 0.85,
+    "source": "Cosmos (replay)",
+    "photo": true
+   }
+  ],
+  "statement": {
+   "by": "Amara Okafor (policyholder)",
+   "text": "A blue car pulled out of the side road right in front of me. I had no time to stop.",
+   "claims": [
+    {
+     "text": "A blue car pulled out of the side road.",
+     "verdict": "supported",
+     "finding": "f3",
+     "conf": 0.9
     },
-    "rules": ["HC133", "HC126"],
-    "jev": {
-      "peril": {"choice": "collision_with_vehicle", "confidence": 0.93},
-      "section_covers_peril": {"noul": 0.95},
-      "exclusion": {"choice": "none", "confidence": 0.92},
-      "fault_band": {"level": "cannot_determine", "confidence": 0.58},
-      "benefit_courtesy_car": {"noul": 0.85},
-      "benefit_legal_expenses": {"noul": 0.2},
-      "severity": {"level": "repairable", "confidence": 0.74},
-      "evidence_sufficient": {"noul": 0.62},
-      "fraud_risk": {"level": "high", "confidence": 0.81}
-    }
-  },
-  {
-    "id": "PD-0211",
-    "title": "Side impact at Elephant & Castle, lane change",
-    "place": "Elephant & Castle / Walworth Rd",
-    "area": "Southwark, SE1",
-    "lat": 51.4937, "lon": -0.1001,
-    "incidentAt": "2026-10-17T08:17:32",
-    "reportedAt": "2026-10-17T08:52:00",
-    "channel": "App",
-    "policyId": "POL-81544",
-    "driver": "Sofia Rossi",
-    "vehicleReg": "LB70 PZE",
-    "thirdParty": {"vehicle": "Silver Hyundai i30", "insurer": "Northgate Insurance"},
-    "estimate": 2960,
-    "assignee": "Tom Reid",
-    "footage": {"still": "xp3Rh", "camera": "EC-03", "source": "Junction CCTV, TfL network", "clip": "media/incidents/PD-0211.mp4", "poster": "media/incidents/PD-0211.jpg", "thumb": "media/incidents/PD-0211-thumb.jpg", "startsAt": "2026-10-17T08:17:32", "duration": 12},
-    "findings": [
-      {"id": "f1", "t": 0.0, "kind": "vehicle", "text": "Claimant's blue hatchback, front nearside damage, angled towards the island.", "det": [4], "conf": 0.88, "source": "YOLO11s"},
-      {"id": "f2", "t": 0.0, "kind": "vehicle", "text": "Silver hatchback, front offside damage, straddling two lanes.", "det": [7], "conf": 0.82, "source": "YOLO11s"},
-      {"id": "f3", "t": 0.0, "kind": "impact", "text": "Both cars left their lanes before contact; neither held a clear lane.", "det": [4, 7], "conf": 0.79, "source": "Cosmos (replay)"},
-      {"id": "f4", "t": 0.0, "kind": "road", "text": "Multi-lane junction with a bus lane, morning peak traffic, a bus at the far stop.", "det": [0, 3], "conf": 0.9, "source": "YOLO11s + Cosmos (replay)"},
-      {"id": "f5", "t": 0.0, "kind": "signal", "text": "One signal head detected at low confidence; its state cannot be relied on.", "det": [15], "conf": 0.29, "source": "YOLO11s + colour check"}
-    ],
-    "statement": {
-      "by": "Sofia Rossi (policyholder)",
-      "text": "The silver car moved across into my lane without indicating.",
-      "claims": [
-        {"text": "The silver car moved across into my lane.", "verdict": "supported", "finding": "f3", "conf": 0.79},
-        {"text": "I stayed in my lane.", "verdict": "contradicted", "finding": "f3", "conf": 0.72},
-        {"text": "It did not indicate.", "verdict": "unverifiable", "finding": null, "conf": 0.5, "note": "Indicators are not visible after impact."}
-      ]
+    {
+     "text": "It did not stop at the junction.",
+     "verdict": "supported",
+     "finding": "f3",
+     "conf": 0.82
     },
-    "rules": ["HC133"],
-    "jev": {
-      "peril": {"choice": "collision_with_vehicle", "confidence": 0.96},
-      "section_covers_peril": {"noul": 0.96},
-      "exclusion": {"choice": "none", "confidence": 0.93},
-      "fault_band": {"level": "shared_fault", "confidence": 0.79},
-      "benefit_courtesy_car": {"noul": 0.9},
-      "benefit_legal_expenses": {"noul": 0.88},
-      "severity": {"level": "repairable", "confidence": 0.8},
-      "evidence_sufficient": {"noul": 0.84},
-      "fraud_risk": {"level": "low", "confidence": 0.88}
+    {
+     "text": "I had no time to stop.",
+     "verdict": "supported",
+     "finding": "f4",
+     "conf": 0.78
     }
+   ]
   },
-  {
-    "id": "PD-0219",
-    "title": "Pulled out of give-way junction in rain",
-    "place": "Burdett Rd / Mile End Rd",
-    "area": "Mile End, E3",
-    "lat": 51.5243, "lon": -0.0351,
-    "incidentAt": "2026-10-14T07:42:18",
-    "reportedAt": "2026-10-14T09:15:00",
-    "channel": "Phone",
-    "policyId": "POL-86032",
-    "driver": "Sam Fletcher",
-    "vehicleReg": "EK18 RNU",
-    "thirdParty": {"vehicle": "Blue Kia Rio", "insurer": "Hartwell Mutual"},
-    "estimate": 2450,
-    "assignee": "Unassigned",
-    "footage": {"still": "N6jKP", "camera": "CAM-12", "source": "Junction CCTV, LB Tower Hamlets", "clip": "media/incidents/PD-0219.mp4", "poster": "media/incidents/PD-0219.jpg", "thumb": "media/incidents/PD-0219-thumb.jpg", "startsAt": "2026-10-14T07:42:18", "duration": 12},
-    "findings": [
-      {"id": "f1", "t": 0.0, "kind": "vehicle", "text": "Insured red hatchback, front-end damage, nose out of the side road.", "det": [1], "conf": 0.94, "source": "YOLO11s"},
-      {"id": "f2", "t": 0.0, "kind": "vehicle", "text": "Blue hatchback on the main road, front offside damage.", "det": [0], "conf": 0.94, "source": "YOLO11s"},
-      {"id": "f3", "t": 0.0, "kind": "road", "text": "GIVE WAY sign and broken give-way lines on the side road.", "det": [], "conf": 0.91, "source": "Cosmos (replay)"},
-      {"id": "f4", "t": 0.0, "kind": "weather", "text": "Heavy rain, wet surface, low light before sunrise.", "det": [], "conf": 0.95, "source": "Cosmos (replay)"}
-    ],
-    "statement": {
-      "by": "Ian Fletcher (policyholder)",
-      "text": "My son was driving my car to work. The other car came out of nowhere in the rain.",
-      "claims": [
-        {"text": "The other car came out of nowhere.", "verdict": "contradicted", "finding": "f3", "conf": 0.84},
-        {"text": "It was raining heavily.", "verdict": "supported", "finding": "f4", "conf": 0.95}
-      ]
-    },
-    "rules": ["HC172"],
-    "jev": {
-      "peril": {"choice": "collision_with_vehicle", "confidence": 0.95},
-      "section_covers_peril": {"noul": 0.95},
-      "exclusion": {"choice": "E1", "confidence": 0.95},
-      "fault_band": {"level": "fully_at_fault", "confidence": 0.82},
-      "benefit_courtesy_car": {"noul": 0.1},
-      "benefit_legal_expenses": {"noul": 0.15},
-      "severity": {"level": "repairable", "confidence": 0.78},
-      "evidence_sufficient": {"noul": 0.9},
-      "fraud_risk": {"level": "low", "confidence": 0.83}
-    }
+  "otherStatement": {
+   "by": "Third-party driver",
+   "text": "I had already pulled out. She was going too fast."
   },
-  {
-    "id": "PD-0226",
-    "title": "Low-speed side-road pull-out at night",
-    "place": "Camden Rd / St Pancras Way",
-    "area": "Camden, NW1",
-    "lat": 51.5430, "lon": -0.1370,
-    "incidentAt": "2026-10-13T22:41:32",
-    "reportedAt": "2026-10-14T08:02:00",
-    "channel": "App",
-    "policyId": "POL-79968",
-    "driver": "Hannah Clarke",
-    "vehicleReg": "LN17 WCV",
-    "thirdParty": {"vehicle": "Red Vauxhall Corsa", "insurer": "Ashby & Lane"},
-    "estimate": 860,
-    "assignee": "Poodle",
-    "footage": {"still": "vDVdk", "camera": "CAM 21", "source": "Junction CCTV, LB Camden", "clip": "media/incidents/PD-0226.mp4", "poster": "media/incidents/PD-0226.jpg", "thumb": "media/incidents/PD-0226-thumb.jpg", "startsAt": "2026-10-13T22:41:32", "duration": 12},
-    "findings": [
-      {"id": "f1", "t": 0.0, "kind": "vehicle", "text": "Claimant's blue hatchback on the main road, headlights on, light front damage.", "det": [0], "conf": 0.9, "source": "YOLO11s"},
-      {"id": "f2", "t": 0.0, "kind": "vehicle", "text": "Red hatchback has crossed the side-road give-way line.", "det": [1], "conf": 0.8, "source": "YOLO11s"},
-      {"id": "f3", "t": 0.0, "kind": "impact", "text": "Low-speed contact, small debris field. Both cars upright, airbags not visible.", "det": [0, 1], "conf": 0.86, "source": "Cosmos (replay)"},
-      {"id": "f4", "t": 0.0, "kind": "light", "text": "Night, street lighting on, dry road.", "det": [], "conf": 0.93, "source": "Cosmos (replay)"}
-    ],
-    "statement": {
-      "by": "Hannah Clarke (policyholder)",
-      "text": "A red car pulled out of St Pancras Way in front of me. I was doing about 20.",
-      "claims": [
-        {"text": "The red car pulled out of the side road.", "verdict": "supported", "finding": "f2", "conf": 0.87},
-        {"text": "It was a low-speed collision.", "verdict": "supported", "finding": "f3", "conf": 0.86},
-        {"text": "I was doing about 20 mph.", "verdict": "unverifiable", "finding": null, "conf": 0.5, "note": "Speed needs GPS or a second frame."}
-      ]
-    },
-    "rules": ["HC172"],
-    "jev": {
-      "peril": {"choice": "collision_with_vehicle", "confidence": 0.97},
-      "section_covers_peril": {"noul": 0.98},
-      "exclusion": {"choice": "none", "confidence": 0.95},
-      "fault_band": {"level": "not_at_fault", "confidence": 0.93},
-      "benefit_courtesy_car": {"noul": 0.92},
-      "benefit_legal_expenses": {"noul": 0.2},
-      "severity": {"level": "cosmetic", "confidence": 0.82},
-      "evidence_sufficient": {"noul": 0.95},
-      "fraud_risk": {"level": "low", "confidence": 0.9}
-    }
-  },
-  {
-    "id": "PD-0231",
-    "title": "Head-on contact while turning right",
-    "place": "Barking Rd / Prince Regent Lane",
-    "area": "Plaistow, E13",
-    "lat": 51.5262, "lon": 0.0296,
-    "incidentAt": "2026-10-12T17:42:18",
-    "reportedAt": "2026-10-12T19:30:00",
-    "channel": "Broker",
-    "policyId": "POL-84410",
-    "driver": "Oliver Grant",
-    "vehicleReg": "GN67 TXA",
-    "thirdParty": {"vehicle": "Blue Hyundai i30", "insurer": "Northgate Insurance"},
-    "estimate": 1980,
-    "assignee": "Unassigned",
-    "footage": {"still": "ulhIn", "camera": "CAM 07", "source": "Junction CCTV, LB Newham", "clip": "media/incidents/PD-0231.mp4", "poster": "media/incidents/PD-0231.jpg", "thumb": "media/incidents/PD-0231-thumb.jpg", "startsAt": "2026-10-12T17:42:18", "duration": 12},
-    "findings": [
-      {"id": "f1", "t": 0.0, "kind": "vehicle", "text": "Claimant's silver estate, heavy front damage, angled into the side road.", "det": [1], "conf": 0.93, "source": "YOLO11s"},
-      {"id": "f2", "t": 0.0, "kind": "vehicle", "text": "Blue hatchback, heavy front damage, over the centre line.", "det": [0], "conf": 0.94, "source": "YOLO11s"},
-      {"id": "f3", "t": 0.0, "kind": "impact", "text": "Front-to-front contact near the centre line of the side-road mouth.", "det": [0, 1], "conf": 0.84, "source": "Cosmos (replay)"},
-      {"id": "f4", "t": 0.0, "kind": "signal", "text": "Indicators: not visible on either car after impact.", "det": [], "conf": 0.38, "source": "Cosmos (replay)"}
-    ],
-    "statement": {
-      "by": "Oliver Grant (policyholder)",
-      "text": "I was turning right with my indicator on. The blue car was overtaking and hit me.",
-      "claims": [
-        {"text": "I was turning right.", "verdict": "supported", "finding": "f1", "conf": 0.8},
-        {"text": "My indicator was on.", "verdict": "unverifiable", "finding": "f4", "conf": 0.5, "note": "Not visible after impact."},
-        {"text": "The blue car was overtaking.", "verdict": "unverifiable", "finding": "f3", "conf": 0.46}
-      ]
-    },
-    "rules": ["HC103"],
-    "jev": {
-      "peril": {"choice": "collision_with_vehicle", "confidence": 0.96},
-      "section_covers_peril": {"noul": 0.96},
-      "exclusion": {"choice": "none", "confidence": 0.91},
-      "fault_band": {"level": "cannot_determine", "confidence": 0.46},
-      "benefit_courtesy_car": {"noul": 0.1},
-      "benefit_legal_expenses": {"noul": 0.1},
-      "severity": {"level": "major", "confidence": 0.7},
-      "evidence_sufficient": {"noul": 0.38},
-      "fraud_risk": {"level": "low", "confidence": 0.8}
-    }
-  },
-  {
-    "id": "PD-0236",
-    "title": "Impact detected on camera, awaiting statement",
-    "place": "Kennington Ln / Vauxhall St",
-    "area": "Kennington, SE11",
-    "lat": 51.4871, "lon": -0.1163,
-    "incidentAt": "2026-10-17T12:52:07",
-    "reportedAt": "2026-10-17T12:52:41",
-    "channel": "Camera alert",
-    "policyId": "POL-91002",
-    "driver": "Ruth Adeyemi",
-    "vehicleReg": "LC20 JUO",
-    "thirdParty": {"vehicle": "Black Audi A4", "insurer": "Unknown"},
-    "estimate": null,
-    "assignee": "Unassigned",
-    "footage": {"still": "6r6vm", "camera": "CCTV-12", "source": "Junction CCTV, LB Lambeth", "clip": "media/incidents/PD-0236.mp4", "poster": "media/incidents/PD-0236.jpg", "thumb": "media/incidents/PD-0236-thumb.jpg", "startsAt": "2026-10-17T12:52:07", "duration": 12},
-    "findings": [
-      {"id": "f1", "t": 0.0, "kind": "impact", "text": "Impact frame: debris in the air between two cars on the crossing.", "det": [0, 1], "conf": 0.95, "source": "YOLO11s + motion spike"},
-      {"id": "f2", "t": 0.0, "kind": "vehicle", "text": "Blue hatchback (plate matched to policy POL-91002), front damage.", "det": [0], "conf": 0.82, "source": "YOLO11s"},
-      {"id": "f3", "t": 0.0, "kind": "vehicle", "text": "Black saloon, front damage.", "det": [1], "conf": 0.82, "source": "YOLO11s"},
-      {"id": "f4", "t": 0.0, "kind": "road", "text": "Zebra crossing at the junction. Pedestrians: none detected.", "det": [], "conf": 0.88, "source": "YOLO11s"}
-    ],
-    "statement": {"by": "Not received", "text": "", "claims": []},
-    "rules": [],
-    "jev": {
-      "peril": {"choice": "collision_with_vehicle", "confidence": 0.94},
-      "section_covers_peril": {"noul": 0.04},
-      "exclusion": {"choice": "none", "confidence": 0.7},
-      "fault_band": {"level": "cannot_determine", "confidence": 0.4},
-      "benefit_courtesy_car": {"noul": 0.1},
-      "benefit_legal_expenses": {"noul": 0.1},
-      "severity": {"level": "major", "confidence": 0.66},
-      "evidence_sufficient": {"noul": 0.12},
-      "fraud_risk": {"level": "low", "confidence": 0.7}
-    }
+  "rules": [
+   "HC172"
+  ],
+  "jev": {
+   "peril": {
+    "choice": "collision_with_vehicle",
+    "confidence": 0.97
+   },
+   "section_covers_peril": {
+    "noul": 0.97
+   },
+   "exclusion": {
+    "choice": "none",
+    "confidence": 0.94
+   },
+   "fault_band": {
+    "level": "not_at_fault",
+    "confidence": 0.9
+   },
+   "benefit_courtesy_car": {
+    "noul": 0.92
+   },
+   "benefit_legal_expenses": {
+    "noul": 0.93
+   },
+   "severity": {
+    "level": "major",
+    "confidence": 0.83
+   },
+   "evidence_sufficient": {
+    "noul": 0.93
+   },
+   "fraud_risk": {
+    "level": "low",
+    "confidence": 0.88
+   }
   }
+ },
+ {
+  "id": "PD-0204",
+  "title": "Van pulled onto a roundabout across a motorcyclist",
+  "place": "Hogarth Roundabout",
+  "area": "Chiswick, W4",
+  "lat": 51.4875,
+  "lon": -0.2515,
+  "incidentAt": "2026-10-15T16:32:18",
+  "reportedAt": "2026-10-15T17:10:00",
+  "channel": "Phone",
+  "policyId": "POL-90417",
+  "driver": "Daniel Moore",
+  "vehicleReg": "YD68 KFM",
+  "thirdParty": {
+   "vehicle": "Dark blue motorcycle (rider thrown)",
+   "insurer": "Ashby & Lane"
+  },
+  "estimate": 2900,
+  "assignee": "Tom Reid",
+  "footage": {
+   "raw": "media/raw/accident_006.mp4",
+   "camera": "Helmet camera",
+   "source": "Motorcyclist's helmet camera, via their insurer",
+   "credit": "Real dashcam footage from UK Dash Cameras, submitted by Jake T",
+   "clip": "media/incidents/PD-0204.mp4",
+   "poster": "media/incidents/PD-0204.jpg",
+   "thumb": "media/incidents/PD-0204-thumb.jpg",
+   "posterAt": 5.0,
+   "startsAt": "2026-10-15T16:32:12",
+   "duration": 22.86
+  },
+  "findings": [
+   {
+    "id": "f1",
+    "t": 2.0,
+    "kind": "road",
+    "text": "Large multi-lane roundabout at dusk. Street lights on, dry road.",
+    "det": [],
+    "conf": 0.88,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f2",
+    "t": 3.4,
+    "kind": "vehicle",
+    "text": "The policyholder's dark high-roof van waits at an entry on the rider's left.",
+    "det": [],
+    "conf": 0.74,
+    "source": "YOLO11s"
+   },
+   {
+    "id": "f3",
+    "t": 5.0,
+    "kind": "vehicle",
+    "text": "The van pulls out across the circulating lane, side-on to the motorcycle already on the roundabout.",
+    "det": [
+     5
+    ],
+    "conf": 0.86,
+    "source": "YOLO11s"
+   },
+   {
+    "id": "f4",
+    "t": 5.6,
+    "kind": "impact",
+    "text": "Impact: the motorcycle hits the van's front offside corner and the rider is thrown.",
+    "det": [],
+    "conf": 0.82,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f5",
+    "t": 20.99,
+    "kind": "vehicle",
+    "text": "The motorcycle lies on its side in front of the stopped van.",
+    "det": [],
+    "conf": 0.8,
+    "source": "YOLO11s"
+   }
+  ],
+  "statement": {
+   "by": "Daniel Moore (policyholder)",
+   "text": "The bike came round fast. I was already pulling out and could not stop.",
+   "claims": [
+    {
+     "text": "I was already on the roundabout.",
+     "verdict": "contradicted",
+     "finding": "f3",
+     "conf": 0.86
+    },
+    {
+     "text": "The bike was going fast.",
+     "verdict": "unverifiable",
+     "finding": null,
+     "conf": 0.5,
+     "note": "A helmet camera cannot show the rider's speed."
+    }
+   ]
+  },
+  "rules": [
+   "HC185",
+   "HC211"
+  ],
+  "jev": {
+   "peril": {
+    "choice": "collision_with_vehicle",
+    "confidence": 0.95
+   },
+   "section_covers_peril": {
+    "noul": 0.03
+   },
+   "exclusion": {
+    "choice": "none",
+    "confidence": 0.92
+   },
+   "fault_band": {
+    "level": "mostly_at_fault",
+    "confidence": 0.86
+   },
+   "benefit_courtesy_car": {
+    "noul": 0.1
+   },
+   "benefit_legal_expenses": {
+    "noul": 0.1
+   },
+   "severity": {
+    "level": "major",
+    "confidence": 0.72
+   },
+   "evidence_sufficient": {
+    "noul": 0.9
+   },
+   "fraud_risk": {
+    "level": "low",
+    "confidence": 0.85
+   }
+  },
+  "otherStatement": {
+   "by": "Motorcyclist",
+   "text": "I was already on the roundabout when the van pulled straight out."
+  }
+ },
+ {
+  "id": "PD-0188",
+  "title": "Car cut in from a slip road and braked hard",
+  "place": "A13 East India Dock Rd / Cotton St",
+  "area": "Poplar, E14",
+  "lat": 51.5116,
+  "lon": -0.0104,
+  "incidentAt": "2026-10-16T14:32:18",
+  "reportedAt": "2026-10-16T15:01:00",
+  "channel": "Phone",
+  "policyId": "POL-77120",
+  "driver": "Marcus Bell",
+  "vehicleReg": "LR21 HHA",
+  "thirdParty": {
+   "vehicle": "Grey Vauxhall Corsa",
+   "insurer": "Undisclosed"
+  },
+  "estimate": 1760,
+  "assignee": "Priya Shah",
+  "footage": {
+   "raw": "media/raw/accident_009.mp4",
+   "camera": "Front dashcam",
+   "source": "Policyholder's dashcam, sent in by phone",
+   "credit": "Real dashcam footage from UK Dash Cameras",
+   "clip": "media/incidents/PD-0188.mp4",
+   "poster": "media/incidents/PD-0188.jpg",
+   "thumb": "media/incidents/PD-0188-thumb.jpg",
+   "posterAt": 4.0,
+   "startsAt": "2026-10-16T14:32:12",
+   "duration": 16.08
+  },
+  "findings": [
+   {
+    "id": "f1",
+    "t": 2.0,
+    "kind": "vehicle",
+    "text": "Grey Vauxhall Corsa joins from the slip road on the left.",
+    "det": [
+     0,
+     1
+    ],
+    "conf": 0.83,
+    "source": "YOLO11s"
+   },
+   {
+    "id": "f2",
+    "t": 4.0,
+    "kind": "motion",
+    "text": "The Corsa moves straight across into the policyholder's lane, close in front.",
+    "det": [
+     4,
+     5,
+     6
+    ],
+    "conf": 0.74,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f3",
+    "t": 6.0,
+    "kind": "impact",
+    "text": "Closest point: the Corsa is within a car length of the policyholder's front. Contact is not clear from this angle.",
+    "det": [
+     11,
+     12,
+     13
+    ],
+    "conf": 0.62,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f4",
+    "t": 8.0,
+    "kind": "motion",
+    "text": "The Corsa brakes hard with clear road ahead of it.",
+    "det": [
+     15,
+     16
+    ],
+    "conf": 0.7,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f5",
+    "t": 10.0,
+    "kind": "road",
+    "text": "Dual carriageway, dry, daylight, light traffic.",
+    "det": [],
+    "conf": 0.9,
+    "source": "Cosmos (replay)"
+   }
+  ],
+  "statement": {
+   "by": "Marcus Bell (policyholder)",
+   "text": "The grey car pulled in from the slip road right in front of me and slammed on. I went into the back of it.",
+   "claims": [
+    {
+     "text": "It pulled in from the slip road.",
+     "verdict": "supported",
+     "finding": "f2",
+     "conf": 0.74
+    },
+    {
+     "text": "It braked for no reason.",
+     "verdict": "supported",
+     "finding": "f4",
+     "conf": 0.7
+    },
+    {
+     "text": "I went into the back of it.",
+     "verdict": "unverifiable",
+     "finding": "f3",
+     "conf": 0.5,
+     "note": "The dashcam does not show the front of the policyholder's car."
+    }
+   ]
+  },
+  "rules": [
+   "HC133",
+   "HC126"
+  ],
+  "jev": {
+   "peril": {
+    "choice": "collision_with_vehicle",
+    "confidence": 0.93
+   },
+   "section_covers_peril": {
+    "noul": 0.95
+   },
+   "exclusion": {
+    "choice": "none",
+    "confidence": 0.92
+   },
+   "fault_band": {
+    "level": "cannot_determine",
+    "confidence": 0.58
+   },
+   "benefit_courtesy_car": {
+    "noul": 0.85
+   },
+   "benefit_legal_expenses": {
+    "noul": 0.2
+   },
+   "severity": {
+    "level": "repairable",
+    "confidence": 0.74
+   },
+   "evidence_sufficient": {
+    "noul": 0.62
+   },
+   "fraud_risk": {
+    "level": "high",
+    "confidence": 0.81
+   }
+  }
+ },
+ {
+  "id": "PD-0211",
+  "title": "Oncoming car spun on a wet bend into the policyholder",
+  "place": "Elephant & Castle / Walworth Rd",
+  "area": "Southwark, SE1",
+  "lat": 51.4937,
+  "lon": -0.1001,
+  "incidentAt": "2026-10-17T08:17:32",
+  "reportedAt": "2026-10-17T08:52:00",
+  "channel": "App",
+  "policyId": "POL-81544",
+  "driver": "Sofia Rossi",
+  "vehicleReg": "LB70 PZE",
+  "thirdParty": {
+   "vehicle": "Black Toyota Prius",
+   "insurer": "Northgate Insurance"
+  },
+  "estimate": 4300,
+  "assignee": "Tom Reid",
+  "footage": {
+   "raw": "media/raw/accident_004.mp4",
+   "camera": "Witness dashcam",
+   "source": "Following driver's dashcam, uploaded via the claim link",
+   "credit": "Real dashcam footage from UK Dash Cameras, submitted by Jon",
+   "clip": "media/incidents/PD-0211.mp4",
+   "poster": "media/incidents/PD-0211.jpg",
+   "thumb": "media/incidents/PD-0211-thumb.jpg",
+   "posterAt": 1.57,
+   "startsAt": "2026-10-17T08:17:30",
+   "duration": 7.41
+  },
+  "findings": [
+   {
+    "id": "f1",
+    "t": 0.5,
+    "kind": "weather",
+    "text": "Wet, wooded single-carriageway road on a left-hand bend. Overcast early morning.",
+    "det": [],
+    "conf": 0.92,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f2",
+    "t": 1.57,
+    "kind": "vehicle",
+    "text": "An oncoming black Toyota Prius slides sideways across the centre line in a spin.",
+    "det": [
+     2
+    ],
+    "conf": 0.84,
+    "source": "YOLO11s"
+   },
+   {
+    "id": "f3",
+    "t": 1.7,
+    "kind": "impact",
+    "text": "Impact: the spinning Prius hits the front offside of the policyholder's black BMW.",
+    "det": [
+     3
+    ],
+    "conf": 0.82,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f4",
+    "t": 5.51,
+    "kind": "vehicle",
+    "text": "The BMW is pushed against the kerb; the Prius stops facing the wrong way.",
+    "det": [
+     5,
+     6
+    ],
+    "conf": 0.78,
+    "source": "YOLO11s"
+   }
+  ],
+  "statement": {
+   "by": "Sofia Rossi (policyholder)",
+   "text": "A car coming the other way lost control on the bend and spun into me.",
+   "claims": [
+    {
+     "text": "The other car lost control on the bend.",
+     "verdict": "supported",
+     "finding": "f2",
+     "conf": 0.84
+    },
+    {
+     "text": "It crossed onto my side of the road.",
+     "verdict": "supported",
+     "finding": "f2",
+     "conf": 0.82
+    },
+    {
+     "text": "The road was wet.",
+     "verdict": "supported",
+     "finding": "f1",
+     "conf": 0.92
+    }
+   ]
+  },
+  "rules": [
+   "HC227"
+  ],
+  "jev": {
+   "peril": {
+    "choice": "collision_with_vehicle",
+    "confidence": 0.96
+   },
+   "section_covers_peril": {
+    "noul": 0.96
+   },
+   "exclusion": {
+    "choice": "none",
+    "confidence": 0.93
+   },
+   "fault_band": {
+    "level": "not_at_fault",
+    "confidence": 0.86
+   },
+   "benefit_courtesy_car": {
+    "noul": 0.9
+   },
+   "benefit_legal_expenses": {
+    "noul": 0.88
+   },
+   "severity": {
+    "level": "repairable",
+    "confidence": 0.72
+   },
+   "evidence_sufficient": {
+    "noul": 0.88
+   },
+   "fraud_risk": {
+    "level": "low",
+    "confidence": 0.9
+   }
+  }
+ },
+ {
+  "id": "PD-0219",
+  "title": "Insured car pulled out into a dual carriageway at night",
+  "place": "Burdett Rd / Mile End Rd",
+  "area": "Mile End, E3",
+  "lat": 51.5243,
+  "lon": -0.0351,
+  "incidentAt": "2026-10-14T07:42:18",
+  "reportedAt": "2026-10-14T09:15:00",
+  "channel": "Phone",
+  "policyId": "POL-86032",
+  "driver": "Sam Fletcher",
+  "vehicleReg": "EK18 RNU",
+  "thirdParty": {
+   "vehicle": "Black hatchback (dashcam car)",
+   "insurer": "Hartwell Mutual"
+  },
+  "estimate": 2450,
+  "assignee": "Unassigned",
+  "footage": {
+   "raw": "media/raw/accident_005.mp4",
+   "camera": "Other driver's dashcam",
+   "source": "Third party's dashcam (AUKEY DR02), via their insurer",
+   "credit": "Real dashcam footage from UK Dash Cameras, submitted by Prof",
+   "clip": "media/incidents/PD-0219.mp4",
+   "poster": "media/incidents/PD-0219.jpg",
+   "thumb": "media/incidents/PD-0219-thumb.jpg",
+   "posterAt": 4.74,
+   "startsAt": "2026-10-14T07:42:13",
+   "duration": 13.91
+  },
+  "findings": [
+   {
+    "id": "f1",
+    "t": 1.2,
+    "kind": "light",
+    "text": "Night on a street-lit dual carriageway. Dry road.",
+    "det": [],
+    "conf": 0.9,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f2",
+    "t": 3.7,
+    "kind": "vehicle",
+    "text": "The insured silver hatchback waits broadside at the side road on the left, lights on.",
+    "det": [
+     0
+    ],
+    "conf": 0.8,
+    "source": "YOLO11s"
+   },
+   {
+    "id": "f3",
+    "t": 4.74,
+    "kind": "road",
+    "text": "It edges over the solid edge line into lane 1 when the other car is under half a second away.",
+    "det": [],
+    "conf": 0.8,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f4",
+    "t": 5.04,
+    "kind": "impact",
+    "text": "Impact: the other car's front-left hits the front of the insured car.",
+    "det": [],
+    "conf": 0.7,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f5",
+    "t": 12.01,
+    "kind": "impact",
+    "text": "Photo after the crash: the other car's airbag is deployed.",
+    "det": [],
+    "conf": 0.7,
+    "source": "Cosmos (replay)",
+    "photo": true
+   }
+  ],
+  "statement": {
+   "by": "Ian Fletcher (policyholder)",
+   "text": "My son was driving my car home. He says the other car came out of nowhere and was going too fast.",
+   "claims": [
+    {
+     "text": "The other car came out of nowhere.",
+     "verdict": "contradicted",
+     "finding": "f3",
+     "conf": 0.82
+    },
+    {
+     "text": "It was going too fast.",
+     "verdict": "unverifiable",
+     "finding": null,
+     "conf": 0.5,
+     "note": "The dashcam shows no speed overlay."
+    }
+   ]
+  },
+  "rules": [
+   "HC172"
+  ],
+  "jev": {
+   "peril": {
+    "choice": "collision_with_vehicle",
+    "confidence": 0.95
+   },
+   "section_covers_peril": {
+    "noul": 0.95
+   },
+   "exclusion": {
+    "choice": "E1",
+    "confidence": 0.95
+   },
+   "fault_band": {
+    "level": "fully_at_fault",
+    "confidence": 0.84
+   },
+   "benefit_courtesy_car": {
+    "noul": 0.1
+   },
+   "benefit_legal_expenses": {
+    "noul": 0.15
+   },
+   "severity": {
+    "level": "repairable",
+    "confidence": 0.75
+   },
+   "evidence_sufficient": {
+    "noul": 0.9
+   },
+   "fraud_risk": {
+    "level": "low",
+    "confidence": 0.83
+   }
+  }
+ },
+ {
+  "id": "PD-0226",
+  "title": "Rear-ended in city traffic",
+  "place": "Camden Rd / St Pancras Way",
+  "area": "Camden, NW1",
+  "lat": 51.543,
+  "lon": -0.137,
+  "incidentAt": "2026-10-13T22:41:32",
+  "reportedAt": "2026-10-14T08:02:00",
+  "channel": "App",
+  "policyId": "POL-79968",
+  "driver": "Hannah Clarke",
+  "vehicleReg": "LN17 WCV",
+  "thirdParty": {
+   "vehicle": "Silver Volkswagen Golf",
+   "insurer": "Ashby & Lane"
+  },
+  "estimate": 1240,
+  "assignee": "Poodle",
+  "footage": {
+   "raw": "media/raw/accident_001.mp4",
+   "camera": "Rear dashcam",
+   "source": "Policyholder's rear dashcam (Nextbase), uploaded in the app",
+   "credit": "Real dashcam footage from UK Dash Cameras, submitted by Mymo",
+   "clip": "media/incidents/PD-0226.mp4",
+   "poster": "media/incidents/PD-0226.jpg",
+   "thumb": "media/incidents/PD-0226-thumb.jpg",
+   "posterAt": 7.6,
+   "startsAt": "2026-10-13T22:41:24",
+   "duration": 13.15
+  },
+  "findings": [
+   {
+    "id": "f1",
+    "t": 1.0,
+    "kind": "road",
+    "text": "Multi-lane city-centre road, dry, low winter sun.",
+    "det": [],
+    "conf": 0.9,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f2",
+    "t": 5.51,
+    "kind": "vehicle",
+    "text": "Silver Volkswagen Golf following in the same lane.",
+    "det": [
+     4,
+     5,
+     6
+    ],
+    "conf": 0.88,
+    "source": "YOLO11s"
+   },
+   {
+    "id": "f3",
+    "t": 7.6,
+    "kind": "motion",
+    "text": "The Golf is about 1.5 m behind and still closing; the policyholder's car holds its lane.",
+    "det": [
+     12,
+     13,
+     14
+    ],
+    "conf": 0.8,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f4",
+    "t": 7.84,
+    "kind": "impact",
+    "text": "Impact: the Golf's front hits the policyholder's rear.",
+    "det": [
+     20,
+     21
+    ],
+    "conf": 0.85,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f5",
+    "t": 8.34,
+    "kind": "impact",
+    "text": "Debris thrown up; the policyholder's car is pushed round about 30 degrees.",
+    "det": [
+     22,
+     23
+    ],
+    "conf": 0.78,
+    "source": "Cosmos (replay)"
+   }
+  ],
+  "statement": {
+   "by": "Hannah Clarke (policyholder)",
+   "text": "I slowed for traffic and the car behind went into the back of me.",
+   "claims": [
+    {
+     "text": "The car behind hit the back of my car.",
+     "verdict": "supported",
+     "finding": "f4",
+     "conf": 0.85
+    },
+    {
+     "text": "I did not change lanes.",
+     "verdict": "supported",
+     "finding": "f3",
+     "conf": 0.8
+    },
+    {
+     "text": "I slowed for traffic.",
+     "verdict": "unverifiable",
+     "finding": null,
+     "conf": 0.5,
+     "note": "A rear camera cannot show the road ahead."
+    }
+   ]
+  },
+  "rules": [
+   "HC126"
+  ],
+  "jev": {
+   "peril": {
+    "choice": "collision_with_vehicle",
+    "confidence": 0.97
+   },
+   "section_covers_peril": {
+    "noul": 0.98
+   },
+   "exclusion": {
+    "choice": "none",
+    "confidence": 0.95
+   },
+   "fault_band": {
+    "level": "not_at_fault",
+    "confidence": 0.9
+   },
+   "benefit_courtesy_car": {
+    "noul": 0.92
+   },
+   "benefit_legal_expenses": {
+    "noul": 0.2
+   },
+   "severity": {
+    "level": "repairable",
+    "confidence": 0.8
+   },
+   "evidence_sufficient": {
+    "noul": 0.95
+   },
+   "fraud_risk": {
+    "level": "low",
+    "confidence": 0.9
+   }
+  }
+ },
+ {
+  "id": "PD-0231",
+  "title": "Van lost control on the motorway beside the policyholder",
+  "place": "Barking Rd / Prince Regent Lane",
+  "area": "Plaistow, E13",
+  "lat": 51.5262,
+  "lon": 0.0296,
+  "incidentAt": "2026-10-12T17:42:18",
+  "reportedAt": "2026-10-12T19:30:00",
+  "channel": "Broker",
+  "policyId": "POL-84410",
+  "driver": "Oliver Grant",
+  "vehicleReg": "GN67 TXA",
+  "thirdParty": {
+   "vehicle": "Silver Fiat Qubo",
+   "insurer": "Northgate Insurance"
+  },
+  "estimate": 1980,
+  "assignee": "Unassigned",
+  "footage": {
+   "raw": "media/raw/accident_008.mp4",
+   "camera": "Front dashcam",
+   "source": "Policyholder's dashcam (Nextbase), via broker",
+   "credit": "Real dashcam footage from UK Dash Cameras, submitted by Josh",
+   "clip": "media/incidents/PD-0231.mp4",
+   "poster": "media/incidents/PD-0231.jpg",
+   "thumb": "media/incidents/PD-0231-thumb.jpg",
+   "posterAt": 7.2,
+   "startsAt": "2026-10-12T17:42:09",
+   "duration": 14.41
+  },
+  "findings": [
+   {
+    "id": "f1",
+    "t": 1.8,
+    "kind": "motion",
+    "text": "Three-lane motorway, dry, overcast. The policyholder's dashcam reads about 70 mph; the van's speed is not shown.",
+    "det": [
+     0,
+     1,
+     2
+    ],
+    "conf": 0.8,
+    "source": "Dashcam overlay"
+   },
+   {
+    "id": "f2",
+    "t": 5.4,
+    "kind": "vehicle",
+    "text": "A silver Fiat Qubo ahead appears to slide sideways across the lanes.",
+    "det": [
+     7
+    ],
+    "conf": 0.7,
+    "source": "YOLO11s"
+   },
+   {
+    "id": "f3",
+    "t": 7.2,
+    "kind": "motion",
+    "text": "The Qubo crosses directly in front of the policyholder's car.",
+    "det": [
+     8,
+     9,
+     10
+    ],
+    "conf": 0.68,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f4",
+    "t": 9.0,
+    "kind": "impact",
+    "text": "The Qubo passes down the policyholder's nearside very close. Contact is not clear from this angle.",
+    "det": [
+     11,
+     12
+    ],
+    "conf": 0.46,
+    "source": "Cosmos (replay)"
+   }
+  ],
+  "statement": {
+   "by": "Oliver Grant (policyholder)",
+   "text": "A van lost control in front of me on the motorway and hit the side of my car.",
+   "claims": [
+    {
+     "text": "A van lost control in front of me.",
+     "verdict": "supported",
+     "finding": "f2",
+     "conf": 0.7
+    },
+    {
+     "text": "It hit the side of my car.",
+     "verdict": "unverifiable",
+     "finding": "f4",
+     "conf": 0.46,
+     "note": "Contact cannot be confirmed from the dashcam angle."
+    }
+   ]
+  },
+  "rules": [
+   "HC126"
+  ],
+  "jev": {
+   "peril": {
+    "choice": "collision_with_vehicle",
+    "confidence": 0.9
+   },
+   "section_covers_peril": {
+    "noul": 0.96
+   },
+   "exclusion": {
+    "choice": "none",
+    "confidence": 0.91
+   },
+   "fault_band": {
+    "level": "not_at_fault",
+    "confidence": 0.7
+   },
+   "benefit_courtesy_car": {
+    "noul": 0.1
+   },
+   "benefit_legal_expenses": {
+    "noul": 0.1
+   },
+   "severity": {
+    "level": "repairable",
+    "confidence": 0.6
+   },
+   "evidence_sufficient": {
+    "noul": 0.38
+   },
+   "fraud_risk": {
+    "level": "low",
+    "confidence": 0.8
+   }
+  }
+ },
+ {
+  "id": "PD-0236",
+  "title": "Policyholder's car crossed the centre hatching into another car",
+  "place": "Kennington Ln / Vauxhall St",
+  "area": "Kennington, SE11",
+  "lat": 51.4871,
+  "lon": -0.1163,
+  "incidentAt": "2026-10-17T12:52:07",
+  "reportedAt": "2026-10-17T12:52:41",
+  "channel": "Camera alert",
+  "policyId": "POL-91002",
+  "driver": "Ruth Adeyemi",
+  "vehicleReg": "LC20 JUO",
+  "thirdParty": {
+   "vehicle": "Maroon hatchback",
+   "insurer": "Unknown"
+  },
+  "estimate": null,
+  "assignee": "Unassigned",
+  "footage": {
+   "raw": "media/raw/accident_003.mp4",
+   "camera": "Witness dashcam",
+   "source": "Witness dashcam, uploaded through the Poodle witness link",
+   "credit": "Real dashcam footage from UK Dash Cameras, submitted by Debbie",
+   "clip": "media/incidents/PD-0236.mp4",
+   "poster": "media/incidents/PD-0236.jpg",
+   "thumb": "media/incidents/PD-0236-thumb.jpg",
+   "posterAt": 2.4,
+   "startsAt": "2026-10-17T12:52:04",
+   "duration": 8.07
+  },
+  "findings": [
+   {
+    "id": "f1",
+    "t": 0.5,
+    "kind": "road",
+    "text": "Suburban road with a hatched centre area. Dry, sunny.",
+    "det": [],
+    "conf": 0.9,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f2",
+    "t": 2.4,
+    "kind": "vehicle",
+    "text": "An oncoming silver Volkswagen Passat, the policyholder's car, crosses the hatched area into the other lane.",
+    "det": [
+     4,
+     5
+    ],
+    "conf": 0.82,
+    "source": "YOLO11s"
+   },
+   {
+    "id": "f3",
+    "t": 2.87,
+    "kind": "impact",
+    "text": "Impact: the Passat hits a maroon hatchback driver's side to driver's side; the hatchback spins.",
+    "det": [
+     8,
+     9,
+     10
+    ],
+    "conf": 0.8,
+    "source": "Cosmos (replay)"
+   },
+   {
+    "id": "f4",
+    "t": 5.67,
+    "kind": "impact",
+    "text": "The Passat stops at the far kerb, where a pushchair beside two adults is knocked over. Whether anyone was in it is not visible.",
+    "det": [
+     12,
+     13,
+     14
+    ],
+    "conf": 0.6,
+    "source": "Cosmos (replay)"
+   }
+  ],
+  "statement": {
+   "by": "Not received",
+   "text": "",
+   "claims": []
+  },
+  "rules": [
+   "HC130"
+  ],
+  "jev": {
+   "peril": {
+    "choice": "collision_with_vehicle",
+    "confidence": 0.94
+   },
+   "section_covers_peril": {
+    "noul": 0.04
+   },
+   "exclusion": {
+    "choice": "none",
+    "confidence": 0.7
+   },
+   "fault_band": {
+    "level": "mostly_at_fault",
+    "confidence": 0.82
+   },
+   "benefit_courtesy_car": {
+    "noul": 0.1
+   },
+   "benefit_legal_expenses": {
+    "noul": 0.1
+   },
+   "severity": {
+    "level": "major",
+    "confidence": 0.66
+   },
+   "evidence_sufficient": {
+    "noul": 0.3
+   },
+   "fraud_risk": {
+    "level": "low",
+    "confidence": 0.7
+   }
+  }
+ }
 ]

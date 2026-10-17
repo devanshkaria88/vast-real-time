@@ -121,7 +121,7 @@ async def cosmos_answer(client: httpx.AsyncClient, claim: dict, question: str) -
     url = url.rstrip("/")
     headers = {"Authorization": f"Bearer {env('COSMOS_TOKEN')}"} if env("COSMOS_TOKEN") else {}
     prompt = (
-        "This is CCTV footage of a road collision, reviewed for an insurance claim. Answer the adjuster's question "
+        "This is dashcam footage of a road collision, reviewed for an insurance claim. Answer the adjuster's question "
         "from what is visible only. If it cannot be seen, say it is not visible. "
         'Reply as <think>your reasoning</think><answer>{"answer": "<= 2 sentences", "grounded": true|false}</answer>.\n'
         f"Question: {question}"

@@ -10,7 +10,26 @@
 
 ## Goal
 
-Describe the user outcome and success criteria.
+The eight claims use the real dashcam videos in `poodle/media/raw/` as their
+incident footage, with findings, statement checks and Jev answers that describe
+each clip.
+
+## Done
+
+- Mapping (claim -> video): PD-0147 002 pull-out at give-way, PD-0204 006 van
+  onto roundabout across a motorcyclist (policyholder is the van), PD-0188 009
+  slip-road cut-in and brake (fraud), PD-0211 004 oncoming Prius spins on wet
+  bend, PD-0219 005 insured car pulls out at night (unnamed son, E1), PD-0226
+  001 rear-ended in traffic, PD-0231 008 van loses control on motorway, PD-0236
+  003 witness footage, Passat crosses hatching. 007 and 010 unused.
+- Kept ids, places, dates, people; policy vehicles changed to match; rules
+  HC130, HC211, HC227 added. Seeded decisions keep the demo's spread.
+- `build_media.py` builds clips/posters from raw; `detect_stills.py` runs YOLO
+  on each finding's frame (conf >= 0.5, bonnet and phone photos excluded).
+- Desk: click a finding to pause on its frame with its boxes; "Real footage"
+  chip with credit; custody hashes the original video.
+- Live Jev rates evidence < 0.5 on every claim (old claims too), so live mode
+  refers everything; seeded mode gives the planned decisions.
 
 ## Plan
 

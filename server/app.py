@@ -53,7 +53,7 @@ def custody(claim: dict) -> list[dict]:
     reported = datetime.fromisoformat(claim["reportedAt"])
     f = claim["footage"]
     items = []
-    for i, (label, rel) in enumerate((("Original still", f"../Demo img/{f['still']}.jpg"),
+    for i, (label, rel) in enumerate((("Original footage", f["raw"]),
                                        ("Incident clip", f["clip"]), ("Poster frame", f["poster"]))):
         path = (WEB / rel).resolve()
         if path.exists():
@@ -102,14 +102,15 @@ def summary(claim: dict) -> dict:
 
 def activity(claim: dict, decision: dict) -> list[dict]:
     t0 = datetime.fromisoformat(claim["reportedAt"])
-    dets = DETECTIONS[claim["footage"]["still"]]["detections"]
+    dets = DETECTIONS[claim["id"]]["detections"]
     counts = Counter(d["label"] for d in dets)
+    frames = len({d["t"] for d in dets})
     verdicts = Counter(c["verdict"] for c in claim["statement"]["claims"])
     vehicles = counts["car"] + counts["truck"] + counts["bus"]
     log = [
         (0, "Poodle", f"Opened the claim from {claim['channel'].lower()}."),
         (3, "Ingest agent", f"Hashed {len(custody(claim))} files with SHA-256 and logged custody."),
-        (8, "Perception agent", f"YOLO11s found {vehicles} vehicles" + (f" and {counts['traffic light']} signal heads." if counts["traffic light"] else ".")),
+        (8, "Perception agent", f"YOLO11s boxed {vehicles} vehicles across {frames} key frames of the footage."),
         (11, "Context agent", f"Placed the incident at {claim['place']} and linked the nearest TfL cameras."),
     ]
     if claim["statement"]["claims"]:
@@ -124,7 +125,7 @@ def activity(claim: dict, decision: dict) -> list[dict]:
 def full(claim: dict) -> dict:
     d = evaluate(claim)
     policy = POLICIES[claim["policyId"]]
-    det = DETECTIONS[claim["footage"]["still"]]
+    det = DETECTIONS[claim["id"]]
     cites = {k: {**WORDING[k], "kind": "clause"} for k in WORDING} | {k: {**RULES[k], "kind": "rule"} for k in RULES}
     f = claim["footage"]
     return {
@@ -332,7 +333,7 @@ h1{{font-size:22px;margin:0}}h2{{font-size:15px;margin:28px 0 8px;border-bottom:
 table{{border-collapse:collapse;width:100%;font-size:12px}}td,th{{border-bottom:1px solid #eee;padding:6px 8px;text-align:left;vertical-align:top}}
 code{{font:11px ui-monospace,Menlo,monospace;word-break:break-all}}.muted{{color:#6b6f76}}.cite{{color:#5e6ad2;font-size:12px}}
 .badge{{display:inline-block;padding:2px 8px;border-radius:4px;background:#f1f1f4;font-weight:600}}img{{max-width:100%;border-radius:6px}}</style></head><body>
-<p class="muted">Poodle evidence pack · generated {datetime.now():%d %b %Y %H:%M} · demo footage, synthetic policy</p>
+<p class="muted">Poodle evidence pack · generated {datetime.now():%d %b %Y %H:%M} · real dashcam footage (UK Dash Cameras), synthetic policy</p>
 <h1>{e(c['id'])}: {e(c['title'])}</h1>
 <p>{e(c['place'])}, {e(c['area'])} · incident {e(c['incidentAt'].replace('T', ' '))} · policy {e(c['policy']['id'])} ({e(c['policy']['coverLabel'])})</p>
 <p><span class="badge">{e(d['label'])}</span> · {e(d['fault']['label'])} · payable {money(st['payable'])} · excess {money(st['excess'])}</p>

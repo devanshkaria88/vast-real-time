@@ -33,16 +33,16 @@ uv venv .venv --python 3.12 && uv pip install --python .venv/bin/python -r serve
 | --- | --- |
 | Live London cameras | TfL JamCams API, live (stills refresh every 5–8 min, 10 s clips). Powered by TfL Open Data. |
 | Incident library | Background scan of every live JamCam; Jev judges each new still and code keeps the incidents (`server/watch.py`). Needs a Jev key. |
-| Detection boxes on incident footage | YOLO11s, precomputed on the demo stills (`server/tools/detect_stills.py`). Signal colour from a pixel check on each traffic-light box. |
+| Detection boxes on incident footage | YOLO11s, precomputed on the frame each finding cites (`server/tools/detect_stills.py`). Click a finding and the clip pauses on that frame with its boxes. |
 | Live camera scan | YOLO11s on the latest TfL still: `$YOLO_URL` on the event stack, else local `ultralytics`. |
 | Coverage decision | Hard rules and the decision table run in code (`server/engine.py`). Typed answers come from Jev when `TYPESAFE_API_KEY` or `OPENROUTER_API_KEY` is set, otherwise from seeded answers. |
 | Footage Q&A | W&B Inference when `WANDB_API_KEY` is set, otherwise rule-based answers over the findings. |
 | Evidence | SHA-256 of every file, custody log, printable evidence pack (`/api/claims/<id>/pack`). |
 | Events | `server/data/events.jsonl`, and VastDB when `VASTDB_ENDPOINT`, `VASTDB_ACCESS_KEY` and `VASTDB_SECRET_KEY` are set. |
 
-Incident footage is demo footage: the team's synthetic CCTV stills (`Demo img/`) turned into 12 s clips by `server/tools/build_media.py`, with the burned-in clock set to each claim's incident time. Policies are synthetic.
+Incident footage is real UK dashcam and helmet-camera footage from UK Dash Cameras submissions (`poodle/media/raw/`), cut into 720p web clips with posters by `server/tools/build_media.py`. Each claim's findings, statement check and Jev answers describe its clip; claim places, dates, people and policies are synthetic, so the burned-in dashcam dates do not match.
 
-Generated accident clips: `server/tools/luma_videos.py` makes 5 s CCTV clips of the crash itself with Luma Ray2 on Amazon Bedrock. Both ends are pinned to the camera's framing so it cannot move: the first keyframe is the still with the crashed cars erased (Stability Erase Object, masked from the YOLO boxes), the last is the evidence still, and the prompt says who broke which rule. Clips land in `poodle/media/luma/` with a manifest of prompts and job ARNs. Ray2 runs only in us-west-2 (async, one job at a time, $7.50 per 5 s 720p clip) and needs `aws sso login`. The desk still plays the 12 s clips.
+Generated accident clips: `server/tools/luma_videos.py` makes 5 s CCTV clips of the crash itself with Luma Ray2 on Amazon Bedrock. Both ends are pinned to the camera's framing so it cannot move: the first keyframe is the still with the crashed cars erased (Stability Erase Object, masked from the YOLO boxes), the last is the evidence still, and the prompt says who broke which rule. Clips land in `poodle/media/luma/` with a manifest of prompts and job ARNs. Ray2 runs only in us-west-2 (async, one job at a time, $7.50 per 5 s 720p clip) and needs `aws sso login`. The desk does not use them; it plays the real footage.
 
 Code is about 200 KB. Media is about 3 MB; to keep it out of a 1 MiB deploy, upload `poodle/media/` to a bucket and set `POODLE_MEDIA_BASE` to its URL.
 
@@ -67,11 +67,11 @@ Calibration so far: crash stills scored `incident` 0.94–0.99, while a first sw
 ### Demo in 90 seconds
 
 1. Inbox: seven claims need a person. Open PD-0147 (J/K, Enter).
-2. The footage plays with YOLO boxes; both main-road signals read red. The two nearest live TfL cameras sit beside it, 45 m and 243 m away.
-3. Ask "What colour was the light?" (cites the signal finding), then "How fast was the other car going?" ("Not visible").
-4. Recommendation: accept, partial. The other driver is at fault (Highway Code 175); the courtesy car is not on the policy. £1,790 payable, £2,140 recovered.
+2. The policyholder's dashcam plays: a blue Mokka pulls out of a give-way junction into her. Click "The blue car crosses the give-way line" and the clip pauses there with the YOLO box. The two nearest live TfL cameras sit beside it.
+3. Ask "Where was the point of impact?" (cites the impact finding), then "How fast was the other car going?" ("Not visible").
+4. Recommendation: accept, partial. The other driver is at fault (Highway Code 172); the courtesy car is not on the policy. £6,500 payable, £6,850 recovered. (Steps 4 and 6 use the seeded answers; with a Jev key set, live Jev currently rates the evidence below 0.5 on every claim and refers them all.)
 5. Open a live camera, scan the latest still, attach it as evidence: it joins the chain of custody with its hash.
-6. Cmd+K, type "camden": PD-0226 settles without a handler. PD-0188 shows the fraud flag and goes to the SIU.
+6. Cmd+K, type "camden": PD-0226 (rear-ended in traffic) settles without a handler. PD-0188 (cut in from a slip road, then braked hard) shows the fraud flag and goes to the SIU. PD-0204: the van driver says he was already on the roundabout; the rider's helmet camera contradicts him.
 7. Evidence pack: one printable page with the decision, findings, statement check and hashes.
 
 ## Working on this repo with coding agents

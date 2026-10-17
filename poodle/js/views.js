@@ -86,7 +86,7 @@ function overlay(claim) {
       const th = Math.round(fs * 1.45);
       const tw = text.length * fs * 0.6 + fs * 0.7;
       const ty = y > th + 2 ? y - th - 2 : y + 2;
-      return `<g class="det${d.state === "red" ? " signal-red" : ""}" data-det="${d.i}">
+      return `<g class="det${d.state === "red" ? " signal-red" : ""}" data-det="${d.i}" data-t="${d.t}">
         <rect class="box" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="4"/>
         <rect class="tag" x="${x.toFixed(1)}" y="${ty.toFixed(1)}" width="${tw.toFixed(0)}" height="${th}" rx="4"/>
         <text x="${(x + fs * 0.35).toFixed(1)}" y="${(ty + th * 0.72).toFixed(1)}" style="font-size:${fs}px">${esc(text)}</text></g>`;
@@ -130,7 +130,7 @@ export function claimView(claim, nav) {
     : `<div><span>Repair estimate</span><b>${fmt.money(st.estimate)}</b></div><div><span>Excess</span><b>${fmt.money(st.excess)}</b></div>
        <div class="total"><span>Payable now</span><b>—</b></div><div><span class="faint">Nothing is paid until a person decides.</span></div>`;
   const findings = claim.findings.map((f) => `
-    <button class="finding" data-fid="${esc(f.id)}" data-det="${f.det.join(",")}">
+    <button class="finding" data-fid="${esc(f.id)}" data-det="${f.det.join(",")}" data-t="${f.t}">
       ${icon(KIND_ICON[f.kind] || "eye", 15)}<span class="txt">${esc(f.text)}</span><span class="src">${esc(f.source)}</span>${conf(f.conf)}
     </button>`).join("");
   const VERDICT_ICON = { supported: "check", contradicted: "x", unverifiable: "minus" };
@@ -187,7 +187,7 @@ export function claimView(claim, nav) {
           <div class="mascot">${POODLE_SVG.replace("mood-watch", `mood-${moodName}`)}</div>
           <span class="sr-only" role="status">${esc(moodText)}</span>
           <div class="feed-h">${icon("cctv", 15)}Incident footage <span class="muted trunc">${esc(claim.footage.camera)} · ${esc(claim.footage.source)}</span>
-            <span class="right"><span class="chip demo" title="Synthetic CCTV built from the team's demo stills">Demo footage</span>
+            <span class="right"><span class="chip demo" title="${esc(claim.footage.credit)}">Real footage</span>
               <button class="icon-btn" data-toggle-dets aria-pressed="true" aria-label="Show detections (D)" title="Detections (D)">${icon("eye", 15)}</button></span></div>
           <div class="player" id="incident-player">
             <video src="${esc(claim.footage.clip)}" poster="${esc(claim.footage.poster)}" muted playsinline loop autoplay preload="auto"></video>
@@ -218,7 +218,7 @@ export function claimView(claim, nav) {
       </section>
 
       <section class="section" aria-labelledby="find-h">
-        <h2 class="section-h" id="find-h">What the footage shows <span class="muted">Hover a finding to locate it</span></h2>
+        <h2 class="section-h" id="find-h">What the footage shows <span class="muted">Click a finding to jump to that moment</span></h2>
         <div class="findings">${findings}</div>
       </section>
 
@@ -311,6 +311,9 @@ export function mountClaim(root, claim, handlers) {
     svg.querySelectorAll("g.det").forEach((g) => g.classList.toggle("hot", ids.includes(g.dataset.det)));
     svg.classList.toggle("dim", ids.length > 0);
   };
+  // Boxes belong to one frame, so they only show while the video is paused on it.
+  const showAt = (t) => svg.querySelectorAll("g.det").forEach((g) => g.classList.toggle("at", t !== null && Math.abs(Number(g.dataset.t) - t) < 0.05));
+  video.addEventListener("play", () => showAt(null));
   root.querySelectorAll(".finding").forEach((row) => {
     const ids = row.dataset.det ? row.dataset.det.split(",") : [];
     row.addEventListener("mouseenter", () => highlight(ids));
@@ -319,6 +322,12 @@ export function mountClaim(root, claim, handlers) {
     row.addEventListener("click", () => {
       locked = locked === row ? null : row;
       root.querySelectorAll(".finding").forEach((r) => r.classList.toggle("is-on", r === locked));
+      if (locked) {
+        const t = Number(row.dataset.t);
+        video.pause();
+        video.currentTime = t;
+        showAt(t);
+      }
       highlight(locked ? ids : []);
     });
   });
