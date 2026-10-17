@@ -193,12 +193,14 @@ async def ask(claim_id: str, body: Ask):
     claim = find(claim_id)
     started = time.perf_counter()
     result, source = None, "Rule-based (replay)"
-    try:
-        result = await services.llm_answer(http, claim, body.question)
+    for name, call in (("Cosmos Reason", services.cosmos_answer), ("W&B Inference", services.llm_answer)):
+        try:
+            result = await call(http, claim, body.question)
+        except Exception as exc:
+            print(f"{name} answer failed, trying the next one:", exc)
         if result:
-            source = "W&B Inference"
-    except Exception as exc:
-        print("LLM answer failed, using replay:", exc)
+            source = name
+            break
     if not result:
         result = answer(claim, body.question)
     by_id = {f["id"]: f for f in claim["findings"]}

@@ -13,9 +13,12 @@ A claims desk for road incidents. Poodle watches the incident footage, spots the
 ### Run it
 
 ```bash
+cp .env.example .env   # optional: paste API keys into .env (gitignored), never into .env.example
 uv run --with-requirements server/requirements.txt uvicorn server.app:app --port 8080
 # open http://localhost:8080
 ```
+
+Every key is optional; each one switches a service from replay to live (see the comments in `.env.example`). Restart the server after editing `.env`.
 
 To scan live TfL stills with YOLO on a laptop, run the server in an environment that also has `ultralytics` (the local fallback detector):
 

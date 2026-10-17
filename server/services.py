@@ -17,7 +17,26 @@ from pathlib import Path
 
 import httpx
 
+ROOT = Path(__file__).resolve().parents[1]
 EVENTS = Path(__file__).resolve().parent / "data" / "events.jsonl"
+
+
+def load_dotenv(path: Path) -> None:
+    """Read KEY=VALUE lines into the environment. Variables already set win, blank values are skipped."""
+    if not path.exists():
+        return
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key = key.removeprefix("export ").strip()
+        value = value.strip().strip("\"'")
+        if key and value and key not in os.environ:
+            os.environ[key] = value
+
+
+load_dotenv(ROOT / ".env")
 
 
 def env(name: str) -> str | None:
@@ -76,6 +95,56 @@ async def detect(client: httpx.AsyncClient, image: bytes) -> dict:
         dets = await asyncio.to_thread(_local_detect, image)
         return {"source": "YOLO11s (local)", "ms": round((time.perf_counter() - started) * 1000), "detections": dets}
     return {"source": None, "ms": 0, "detections": [], "error": "No detector connected. Set YOLO_URL or install ultralytics."}
+
+
+# ---------------------------------------------------------------- Cosmos Reason (video Q&A)
+
+_cosmos_model: str | None = None
+
+
+async def _cosmos_model_id(client: httpx.AsyncClient, url: str, headers: dict) -> str:
+    global _cosmos_model
+    if env("COSMOS_MODEL"):
+        return env("COSMOS_MODEL")
+    if _cosmos_model is None:
+        r = await client.get(f"{url}/v1/models", headers=headers, timeout=10)
+        r.raise_for_status()
+        _cosmos_model = r.json()["data"][0]["id"]
+    return _cosmos_model
+
+
+async def cosmos_answer(client: httpx.AsyncClient, claim: dict, question: str) -> dict | None:
+    url = env("COSMOS3_REASON_URL")
+    clip = ROOT / "poodle" / claim["footage"]["clip"]
+    if not url or not clip.exists():
+        return None
+    url = url.rstrip("/")
+    headers = {"Authorization": f"Bearer {env('COSMOS_TOKEN')}"} if env("COSMOS_TOKEN") else {}
+    prompt = (
+        "This is CCTV footage of a road collision, reviewed for an insurance claim. Answer the adjuster's question "
+        "from what is visible only. If it cannot be seen, say it is not visible. "
+        'Reply as <think>your reasoning</think><answer>{"answer": "<= 2 sentences", "grounded": true|false}</answer>.\n'
+        f"Question: {question}"
+    )
+    video = base64.b64encode(clip.read_bytes()).decode()
+    r = await client.post(f"{url}/v1/chat/completions", headers=headers, timeout=60, json={
+        "model": await _cosmos_model_id(client, url, headers),
+        "messages": [{"role": "user", "content": [
+            {"type": "video_url", "video_url": {"url": f"data:video/mp4;base64,{video}"}},
+            {"type": "text", "text": prompt},
+        ]}],
+        "max_tokens": 400, "temperature": 0,
+    })
+    r.raise_for_status()
+    text = r.json()["choices"][0]["message"]["content"]
+    if "<answer>" in text:
+        text = text.split("<answer>", 1)[1].split("</answer>", 1)[0].strip()
+    try:
+        body = json.loads(text)
+        answer, grounded = body.get("answer", ""), bool(body.get("grounded"))
+    except json.JSONDecodeError:
+        answer, grounded = text, not text.lower().startswith("not visible")
+    return {"answer": answer, "grounded": grounded, "citations": []}
 
 
 # ---------------------------------------------------------------- W&B Inference (LLM prose)
@@ -201,11 +270,17 @@ def services_status(tfl_status: dict) -> list[dict]:
         return {"id": id_, "name": name, "role": role, "status": "live" if live else "replay", "detail": live_text if live else fallback}
 
     yolo_live = bool(env("YOLO_URL")) or LOCAL_YOLO
+    try:
+        import vastdb  # noqa: F401
+        vastdb_sdk = True
+    except Exception:
+        vastdb_sdk = False
+    vastdb_fallback = "SDK not installed (pip install vastdb pyarrow)" if env("VASTDB_ENDPOINT") else "Local event log"
     return [
         s("tfl", "TfL JamCams", "Live London cameras", tfl_status["ok"], f"{tfl_status['count']} live", "Snapshot (feed unreachable)"),
         s("yolo", "YOLO11", "Detection on frames", yolo_live, "Event stack" if env("YOLO_URL") else "Local yolo11s", "Precomputed boxes"),
         s("cosmos", "Cosmos Reason", "Video reasoning", bool(env("COSMOS3_REASON_URL")), "Event stack", "Recorded findings"),
         s("jev", "TypeSafe Jev", "Typed coverage answers", bool(env("TYPESAFE_API_KEY") or env("OPENROUTER_API_KEY")), "jev-1.14.0", "Seeded answers"),
         s("llm", "W&B Inference", "Answers in plain English", bool(env("WANDB_API_KEY")), env("POODLE_LLM_MODEL") or "Llama 3.3 70B", "Rule-based answers"),
-        s("vastdb", "VastDB", "Evidence and events store", bool(env("VASTDB_ENDPOINT")), "Writing events", "Local event log"),
+        s("vastdb", "VastDB", "Evidence and events store", bool(env("VASTDB_ENDPOINT")) and vastdb_sdk, "Writing events", vastdb_fallback),
     ]
